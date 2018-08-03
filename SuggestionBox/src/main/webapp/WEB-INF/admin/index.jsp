@@ -62,8 +62,7 @@
                                 <input type="text" name="title" placeholder="Search from title"/>
                                 <button type="submit" class="btn btn-success">Search</button>
                             </form>
-
-                            <p><a href="AdminController"><button type="submit" class="btn btn-warning">Clear Search</button></a></p>
+                            <p id="clearSearch"><a href="AdminController"><button type="submit" class="btn btn-info">Clear Search</button></a></p>
                         </div>
                         <hr>
                         <c:forEach items="${suggestionsList}" var="currentSuggestion">
@@ -92,7 +91,7 @@
                             <button type="submit" class="btn btn-success">Search</button>
                         </form>
 
-                        <p><a href="AdminController"><button type="submit" class="btn btn-warning">Clear Search</button></a></p>
+                        <p><a href="AdminController"><button type="submit" class="btn btn-info">Clear Search</button></a></p>
                         <h3>Users</h3>
                         <hr>
                         <c:forEach items="${usersList}" var="currentUser">

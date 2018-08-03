@@ -69,7 +69,7 @@
                                 <button type="submit" class="btn btn-success">Search</button>
                             </form>
                             
-                            <p><a href="AdminController"><button type="submit" class="btn btn-warning">Clear Search</button></a></p>
+                            <p id="clearSearch"><a href="UserController"><button type="submit" class="btn btn-info">Clear Search</button></a></p>
                         </div>
                         <hr>
                         <c:forEach items="${usersSuggestions}" var="currentSuggestion">
