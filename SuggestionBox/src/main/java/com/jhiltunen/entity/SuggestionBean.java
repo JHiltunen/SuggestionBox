@@ -73,19 +73,7 @@ public class SuggestionBean implements Serializable {
     }
 
     public void setCreationDate(String creationDate) {
-        try {
-            // convert string to date object
-            SimpleDateFormat mysqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = mysqlDateFormat.parse(creationDate);
-            
-            // convert date object to string with format 1.1.1990
-            SimpleDateFormat finnishDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-            String result = finnishDateFormat.format(date);
-            
-            this.creationDate = result;
-        } catch (ParseException ex) {
-            
-        }
+        this.creationDate = creationDate;
     }
 
     public Status getStatus() {

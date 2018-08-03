@@ -53,23 +53,7 @@ public class ProcedureBean {
     }
 
     public void setDate(String date) {
-        if (date == null) {
-            this.date = date;
-        } else {
-            try {
-                // convert string to date object
-                SimpleDateFormat mysqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date mysqlDate = mysqlDateFormat.parse(date);
-
-                // convert date object to string with format 1.1.1990
-                SimpleDateFormat finnishDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-                String result = finnishDateFormat.format(mysqlDate);
-
-                this.date = result;
-            } catch (ParseException ex) {
-
-            }
-        }
+        this.date = date;
     }
 
     public int getUserId() {

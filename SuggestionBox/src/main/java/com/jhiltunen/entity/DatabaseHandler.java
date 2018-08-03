@@ -123,6 +123,9 @@ public class DatabaseHandler {
         }
     }
 
+    /*
+    Use this method to check if username isn't already taken
+     */
     public boolean usernameAvailable(String username) {
 
         Connection connection = null;
@@ -161,6 +164,9 @@ public class DatabaseHandler {
         }
     }
 
+    /*
+    Use this method to check if email isn't already taken
+     */
     public boolean emailAvailable(String email) {
 
         Connection connection = null;
@@ -200,6 +206,9 @@ public class DatabaseHandler {
         }
     }
 
+    /*
+    Use this method when new user should be registered
+     */
     public boolean addUser(UserBean user) {
         Connection connection = null;
         PreparedStatement addUserStatement = null;
@@ -246,6 +255,9 @@ public class DatabaseHandler {
         }
     }
 
+    /*
+    Method to add new suggestion
+     */
     public boolean addSuggestion(SuggestionBean suggestion) {
         Connection connection = null;
         PreparedStatement addSuggestionStatement = null;
@@ -285,7 +297,7 @@ public class DatabaseHandler {
         }
     }
 
-    // verifyLogin method that checks if users credentials matched in database
+    // method that checks if users credentials matched in database
     public UserBean verifyLogin(UserBean user) {
 
         Connection connection = null;
@@ -353,6 +365,9 @@ public class DatabaseHandler {
         }
     }
 
+    /*
+    Counts how many suggestion specific user has
+     */
     public int countUsersAllSuggestions(int userId) {
 
         Connection connection = null;
@@ -394,6 +409,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    Count number of (specific) user's suggestions that have "Accepted" procedure
+     */
     public int countUsersAcceptedSuggestions(int userId) {
 
         Connection connection = null;
@@ -436,6 +454,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    Count number of (specific) user's suggestions that have "Rejected" procedure
+     */
     public int countUsersRejectedSuggestions(int userId) {
 
         Connection connection = null;
@@ -478,6 +499,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    Count number of (specific) user's suggestions that have "WaitingDecision" procedure
+     */
     public int countUsersWaitingDecisionSuggestions(int userId) {
 
         Connection connection = null;
@@ -520,6 +544,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    Count number of (specific) user's suggestions that have "Noprocedure" procedure
+     */
     public int countUsersNoProcedureSuggestions(int userId) {
 
         Connection connection = null;
@@ -562,7 +589,9 @@ public class DatabaseHandler {
         return 0;
     }
 
-    // admin
+    /*
+    count number of all suggestions
+     */
     public int countAllSuggestions() {
 
         Connection connection = null;
@@ -602,6 +631,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    count number of all suggestions that have "Accepted" procedure
+    */
     public int countAllAcceptedSuggestions() {
 
         Connection connection = null;
@@ -643,6 +675,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    count number of all suggestions that have "Rejected" procedure
+    */
     public int countAllRejectedSuggestions() {
 
         Connection connection = null;
@@ -684,6 +719,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    count number of all suggestions that have "WaitingDecision" procedure
+    */
     public int countAllWaitingDecisionSuggestions() {
 
         Connection connection = null;
@@ -725,6 +763,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    count number of all suggestions that have "Noprocedure" procedure
+    */
     public int countAllNoProcedureSuggestions() {
 
         Connection connection = null;
@@ -766,6 +807,9 @@ public class DatabaseHandler {
         return 0;
     }
 
+    /*
+    Method that fetches all users from database
+    */
     public List<UserBean> fetchAllusers() {
         List<UserBean> users = new ArrayList<>();
 
@@ -821,6 +865,9 @@ public class DatabaseHandler {
         return users;
     }
 
+    /*
+    Method that searches all users that's firstname/lastname contains name or a part of name given in parameter
+    */
     public List<UserBean> searchUserByName(String name) {
         List<UserBean> users = new ArrayList<>();
 
@@ -829,7 +876,7 @@ public class DatabaseHandler {
         ResultSet resultSet = null;
 
         String nameInUpperCase = name.toUpperCase();
-        
+
         try {
 
             // open connection to database
@@ -848,7 +895,7 @@ public class DatabaseHandler {
 
             // prepare the sql statement for database
             fetchAllUsersByNameStatement = connection.prepareStatement(fetchAllUsersByNameSQL);
-            
+
             fetchAllUsersByNameStatement.setString(1, '%' + nameInUpperCase + '%');
 
             // execute the query and save the result to resultSet variable
@@ -879,7 +926,10 @@ public class DatabaseHandler {
         // return list of all users
         return users;
     }
-    
+
+    /*
+    Method that fetches all suggestions from database
+    */
     public List<SuggestionBean> fetchAllSuggestions() {
         List<SuggestionBean> suggestions = new ArrayList<>();
 
@@ -913,7 +963,7 @@ public class DatabaseHandler {
                 // Luodaan olio ja lisätään listaan                    
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
-                
+
                 suggestion.setUserID(resultSet.getInt("userId"));
                 suggestion.setUsername(resultSet.getString("username"));
                 suggestion.setId(resultSet.getInt("suggestionId"));
@@ -922,12 +972,12 @@ public class DatabaseHandler {
                 suggestion.setCreationDate(resultSet.getString("suggestionCreationDate"));
                 suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
                 suggestion.setProcedure(procedure);
-                
+
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
                 procedure.setDescription(resultSet.getString("procedureDescription"));
                 procedure.setDate(resultSet.getString("procedureCreationDate"));
                 procedure.setUserId(resultSet.getInt("procedureUserId"));
-                
+
                 suggestions.add(suggestion);
             }
         } catch (SQLException e) {
@@ -941,6 +991,9 @@ public class DatabaseHandler {
         return suggestions;
     }
 
+    /*
+    Fetches all suggestions where suggestionTitle contains string given in method parameter
+    */
     public List<SuggestionBean> fetchAllSuggestionsWhereTitleContains(String suggestionTitleContains) {
         List<SuggestionBean> suggestions = new ArrayList<>();
 
@@ -960,9 +1013,9 @@ public class DatabaseHandler {
             } else {
                 System.out.println("Connection succesful!");
             }
-            
+
             String suggestionTitleUppercase = suggestionTitleContains.toUpperCase();
-            
+
             // SQL clause that fetches all suggestions
             String fetchAllSuggestionsWhereTitleContainsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE UPPER(suggestionTitle) LIKE ? ORDER BY suggestions.status, suggestionCreationDate DESC";
 
@@ -970,7 +1023,7 @@ public class DatabaseHandler {
             fetchAllSuggestionsWhereTitleContainsStatement = connection.prepareStatement(fetchAllSuggestionsWhereTitleContainsSQL);
 
             fetchAllSuggestionsWhereTitleContainsStatement.setString(1, '%' + suggestionTitleUppercase + '%');
-            
+
             // execute the query and save the result to resultSet variable
             resultSet = fetchAllSuggestionsWhereTitleContainsStatement.executeQuery();
 
@@ -978,7 +1031,7 @@ public class DatabaseHandler {
                 // Luodaan olio ja lisätään listaan                    
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
-                
+
                 suggestion.setUserID(resultSet.getInt("userId"));
                 suggestion.setUsername(resultSet.getString("username"));
                 suggestion.setId(resultSet.getInt("suggestionId"));
@@ -987,15 +1040,15 @@ public class DatabaseHandler {
                 suggestion.setCreationDate(resultSet.getString("suggestionCreationDate"));
                 suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
                 suggestion.setProcedure(procedure);
-                
+
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
                 procedure.setDescription(resultSet.getString("procedureDescription"));
                 procedure.setDate(resultSet.getString("procedureCreationDate"));
                 procedure.setUserId(resultSet.getInt("procedureUserId"));
-                
+
                 suggestions.add(suggestion);
             }
-            
+
             System.out.println("Suggestions: " + suggestions);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1007,7 +1060,10 @@ public class DatabaseHandler {
         // return list of all suggestions
         return suggestions;
     }
-    
+
+    /*
+    Fetches all suggestions (from specific user; user id given in method parameter) where suggestionTitle contains string given in method parameter
+    */
     public List<SuggestionBean> fetchUsersAllSuggestionsWhereTitleContains(String suggestionTitleContains, int userId) {
         List<SuggestionBean> suggestions = new ArrayList<>();
 
@@ -1027,9 +1083,9 @@ public class DatabaseHandler {
             } else {
                 System.out.println("Connection succesful!");
             }
-            
+
             String suggestionTitleUppercase = suggestionTitleContains.toUpperCase();
-            
+
             // SQL clause that fetches all suggestions
             String fetchUsersAllSuggestionsWhereTitleContainsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE UPPER(suggestionTitle) LIKE ? AND suggestions.userId = ? ORDER BY suggestions.status, suggestionCreationDate DESC";
 
@@ -1038,7 +1094,7 @@ public class DatabaseHandler {
 
             fetchUsersAllSuggestionsWhereTitleContainsStatement.setString(1, '%' + suggestionTitleUppercase + '%');
             fetchUsersAllSuggestionsWhereTitleContainsStatement.setInt(2, userId);
-            
+
             // execute the query and save the result to resultSet variable
             resultSet = fetchUsersAllSuggestionsWhereTitleContainsStatement.executeQuery();
 
@@ -1046,7 +1102,7 @@ public class DatabaseHandler {
                 // Luodaan olio ja lisätään listaan                    
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
-                
+
                 suggestion.setUserID(resultSet.getInt("userId"));
                 suggestion.setUsername(resultSet.getString("username"));
                 suggestion.setId(resultSet.getInt("suggestionId"));
@@ -1055,15 +1111,15 @@ public class DatabaseHandler {
                 suggestion.setCreationDate(resultSet.getString("suggestionCreationDate"));
                 suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
                 suggestion.setProcedure(procedure);
-                
+
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
                 procedure.setDescription(resultSet.getString("procedureDescription"));
                 procedure.setDate(resultSet.getString("procedureCreationDate"));
                 procedure.setUserId(resultSet.getInt("procedureUserId"));
-                
+
                 suggestions.add(suggestion);
             }
-            
+
             System.out.println("Suggestions: " + suggestions);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1075,7 +1131,10 @@ public class DatabaseHandler {
         // return list of all suggestions
         return suggestions;
     }
-    
+
+    /*
+    Fetches all suggestions that are made by specific user (userId defined in method parameter)
+    */
     public List<SuggestionBean> fetchAllSuggestionsByUserId(int userID) {
         List<SuggestionBean> suggestions = new ArrayList<>();
 
@@ -1109,8 +1168,8 @@ public class DatabaseHandler {
             while (resultSet.next()) {
                 // create Object and add to list                  
                 SuggestionBean suggestion = new SuggestionBean();
-                ProcedureBean procedure = new ProcedureBean();                
-                
+                ProcedureBean procedure = new ProcedureBean();
+
                 suggestion.setId(resultSet.getInt("suggestionId"));
                 suggestion.setTitle(resultSet.getString("suggestionTitle"));
                 suggestion.setDescription(resultSet.getString("suggestionDescription"));
@@ -1123,7 +1182,7 @@ public class DatabaseHandler {
                 procedure.setDescription(resultSet.getString("procedureDescription"));
                 procedure.setDate(resultSet.getString("procedureCreationDate"));
                 procedure.setUserId(resultSet.getInt("procedureUserId"));
-                
+
                 suggestions.add(suggestion);
             }
         } catch (SQLException e) {
@@ -1137,6 +1196,9 @@ public class DatabaseHandler {
         return suggestions;
     }
 
+    /*
+    Fetches specific (userId given in method parameter) user's user information
+    */
     public UserBean fetchUserById(int userId) {
         Connection connection = null;
         PreparedStatement fetchUserByIdStatement = null;
@@ -1194,6 +1256,9 @@ public class DatabaseHandler {
         return null;
     }
 
+    /*
+    Fetches suggestion with specific suggestionId
+    */
     public SuggestionBean fetchSuggestionById(int id) {
         Connection connection = null;
         PreparedStatement fetchSuggestionByIdStatement = null;
@@ -1227,7 +1292,7 @@ public class DatabaseHandler {
                 // get the suggestion information from database and return SuggestionBean with the data
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
-                
+
                 suggestion.setId(resultSet.getInt("suggestionId"));
                 suggestion.setTitle(resultSet.getString("suggestionTitle"));
                 suggestion.setDescription(resultSet.getString("suggestionDescription"));
@@ -1235,7 +1300,7 @@ public class DatabaseHandler {
                 suggestion.setUserID(resultSet.getInt("userId"));
                 suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
                 suggestion.setProcedure(procedure);
-                
+
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
                 procedure.setDescription(resultSet.getString("procedureDescription"));
                 if (resultSet.wasNull()) {
@@ -1256,6 +1321,9 @@ public class DatabaseHandler {
         return null;
     }
 
+    /*
+    Method that's used to update user's information
+    */
     public boolean updateUser(UserBean user) {
         Connection connection = null;
         PreparedStatement updateUserStatement = null;
@@ -1298,6 +1366,9 @@ public class DatabaseHandler {
         return false;
     }
 
+    /*
+    Method that updates suggestions information
+    */
     public boolean updateSuggestion(SuggestionBean suggestion) {
         Connection connection = null;
         PreparedStatement updateSuggestionStatement = null;
@@ -1336,6 +1407,9 @@ public class DatabaseHandler {
         return false;
     }
 
+    /*
+    Method that checks if theres suggestion with specific id
+    */
     public boolean suggestionExists(int suggestionId) {
         Connection connection = null;
         PreparedStatement suggestionExistsStatement = null;
@@ -1420,6 +1494,9 @@ public class DatabaseHandler {
         return false;
     }
 
+    /*
+    method that updates specific suggestions suggestionprocedurestatus
+    */
     public boolean updateSuggestionProcedureStatus(ProcedureStatus suggestionProcedure, int suggestionId) {
         Connection connection = null;
         PreparedStatement updateSuggestionProcedureStatement = null;
@@ -1453,6 +1530,9 @@ public class DatabaseHandler {
         }
     }
 
+    /*
+    method that adds procedure and if there's duplicate key, then updates procedure information
+    */
     public boolean addProcedure(ProcedureBean procedure) {
         Connection connection = null;
         PreparedStatement addProcedureStatement = null;
@@ -1493,6 +1573,9 @@ public class DatabaseHandler {
         }
     }
 
+    /*
+    changes the users (with specific userId) status to poistettu
+    */
     public boolean deactivateUserByID(int userID) {
         Connection connection = null;
         PreparedStatement deactivateUserStatement = null;
@@ -1529,6 +1612,9 @@ public class DatabaseHandler {
         return false;
     }
 
+    /*
+    changes the suggestion (with specific suggestionId) status to poistettu
+    */
     public boolean deactivateSuggestionById(int suggestionID) {
         Connection connection = null;
         PreparedStatement deactivateSuggestionByIdStatement = null;
@@ -1565,6 +1651,10 @@ public class DatabaseHandler {
         return false;
     }
 
+    /*
+    method to allow standard user deactivate his/her own suggestion
+    checks that suggestion userId is same as the userId that came in parameter
+    */
     public boolean deactivateSuggestionByIdAndUserId(int suggestionID, int userId) {
         Connection connection = null;
         PreparedStatement deactivateSuggestionByIdAndUserIdStatement = null;
