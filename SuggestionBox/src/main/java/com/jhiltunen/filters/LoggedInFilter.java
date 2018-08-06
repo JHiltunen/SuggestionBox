@@ -104,7 +104,7 @@ public class LoggedInFilter implements Filter {
         boolean loggedIn = session != null && session.getAttribute("userId") != null && session.getAttribute("username") != null && session.getAttribute("userStatus") != null && session.getAttribute("groupId") != null; // attributes from session are not null
         
         // user succesfully logged in. Verify that groupID is correct and status of the user is active
-        if (loggedIn && ((Integer) session.getAttribute("groupId") == 1 || (Integer) session.getAttribute("groupId") == 2 || (Integer) session.getAttribute("groupId") == 3) && session.getAttribute("userStatus").equals(Status.Aktiivinen)) {
+        if (loggedIn && ((Integer) session.getAttribute("groupId") == 1 || (Integer) session.getAttribute("groupId") == 2 || (Integer) session.getAttribute("groupId") == 3) && session.getAttribute("userStatus").equals(Status.Active)) {
             chain.doFilter(request, response);
         } else {
             response.sendRedirect("index.jsp");

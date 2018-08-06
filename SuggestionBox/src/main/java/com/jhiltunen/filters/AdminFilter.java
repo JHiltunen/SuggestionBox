@@ -107,7 +107,7 @@ public class AdminFilter implements Filter {
         boolean loggedIn = session != null && session.getAttribute("userId") != null && session.getAttribute("username") != null && session.getAttribute("userStatus") != null && session.getAttribute("groupId") != null; // attributes from session are not null
         
         // allow only admin users
-        if (loggedIn && (Integer) session.getAttribute("groupId") == 3 && session.getAttribute("userStatus").equals(Status.Aktiivinen)) {
+        if (loggedIn && (Integer) session.getAttribute("groupId") == 3 && session.getAttribute("userStatus").equals(Status.Active)) {
             chain.doFilter(request, response);
         } else if (loggedIn && (Integer) session.getAttribute("groupId") == 2) {
             // user that's loggedIn belongs to control group and tries to acces admin page

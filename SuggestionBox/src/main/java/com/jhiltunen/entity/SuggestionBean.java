@@ -5,13 +5,7 @@
  */
 package com.jhiltunen.entity;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

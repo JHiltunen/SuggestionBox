@@ -324,7 +324,7 @@ public class DatabaseHandler {
             searchClause = connection.prepareStatement(searchUserByUsername);
 
             searchClause.setString(1, user.getUsername());
-            searchClause.setString(2, Status.Aktiivinen.displayName());
+            searchClause.setString(2, Status.Active.displayName());
 
             // execute the query and save the result to resultSet variable
             resultSet = searchClause.executeQuery();
@@ -1595,7 +1595,7 @@ public class DatabaseHandler {
             deactivateUserStatement = connection.prepareStatement(deactivateUserSQL);
 
             // bind the values from object for the addUserSQL statement
-            deactivateUserStatement.setString(1, Status.Poistettu.displayName());
+            deactivateUserStatement.setString(1, Status.Deleted.displayName());
             deactivateUserStatement.setInt(2, userID);
 
             // execute the query and save the result to resultSet variable
@@ -1634,7 +1634,7 @@ public class DatabaseHandler {
             deactivateSuggestionByIdStatement = connection.prepareStatement(deactivateSuggestionByIdSQL);
 
             // bind the values from object for the addUserSQL statement
-            deactivateSuggestionByIdStatement.setString(1, Status.Poistettu.displayName());
+            deactivateSuggestionByIdStatement.setString(1, Status.Deleted.displayName());
             deactivateSuggestionByIdStatement.setInt(2, suggestionID);
 
             // execute the query and save the result to resultSet variable
@@ -1674,7 +1674,7 @@ public class DatabaseHandler {
             deactivateSuggestionByIdAndUserIdStatement = connection.prepareStatement(deactivateSuggestionByIdAndUserIdSQL);
 
             // bind the values from object for the addUserSQL statement
-            deactivateSuggestionByIdAndUserIdStatement.setString(1, Status.Poistettu.displayName());
+            deactivateSuggestionByIdAndUserIdStatement.setString(1, Status.Deleted.displayName());
             deactivateSuggestionByIdAndUserIdStatement.setInt(2, suggestionID);
             deactivateSuggestionByIdAndUserIdStatement.setInt(3, userId);
 

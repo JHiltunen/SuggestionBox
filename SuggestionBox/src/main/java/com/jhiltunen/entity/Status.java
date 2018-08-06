@@ -10,8 +10,8 @@ package com.jhiltunen.entity;
  * @author s1601378
  */
 public enum Status {
-    Aktiivinen("Aktiivinen"),
-    Poistettu("Poistettu");
+    Active("Active"),
+    Deleted("Deleted");
 
     private String displayName;
 

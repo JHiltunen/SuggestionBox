@@ -11,8 +11,8 @@ package com.jhiltunen.entity;
  */
 public enum ProcedureStatus {
     NOPROCEDURE("No procedure"),
-    WAITINGDECISION("Waiting for the decision"),
-    ACCEPTED("Accepted"),
+    AWAITINGDECISION("Waiting for the decision"),
+    APPROVED("Approved"),
     REJECTED("Rejected");
 
     private String displayName;
