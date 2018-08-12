@@ -57,13 +57,13 @@
                     <label>Suggestion status</label>
                     <div class="form-group">
                         <select class="form-control" name="status">
-                            <c:if test="${suggestion.status == 'Aktiivinen'}">
-                                <option value="Aktiivinen" selected>Aktiivinen</option>
-                                <option value="Poistettu">Poistettu</option>
+                            <c:if test="${suggestion.status == 'Active'}">
+                                <option value="Active" selected>Active</option>
+                                <option value="Deleted">Deleted</option>
                             </c:if>
-                            <c:if test="${suggestion.status == 'Poistettu'}">
-                                <option value="Aktiivinen">Aktiivinen</option>
-                                <option value="Poistettu" selected>Poistettu</option>
+                            <c:if test="${suggestion.status == 'Deleted'}">
+                                <option value="Active">Active</option>
+                                <option value="Deleted" selected>Deleted</option>
                             </c:if>
                         </select>
                     </div>

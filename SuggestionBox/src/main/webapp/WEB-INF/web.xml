@@ -57,8 +57,8 @@
         <servlet-class>com.jhiltunen.servlets.DeleteUserController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SuggestionController</servlet-name>
-        <servlet-class>com.jhiltunen.servlets.SuggestionController</servlet-class>
+        <servlet-name>AddSuggestionController</servlet-name>
+        <servlet-class>com.jhiltunen.servlets.AddSuggestionController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteSuggestionController</servlet-name>

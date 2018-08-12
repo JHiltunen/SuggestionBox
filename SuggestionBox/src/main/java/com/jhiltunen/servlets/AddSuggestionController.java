@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author s1601378
  */
-public class SuggestionController extends HttpServlet {
+public class AddSuggestionController extends HttpServlet {
 
     private DatabaseHandler databaseHandler = new DatabaseHandler();
 

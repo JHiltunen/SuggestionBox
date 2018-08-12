@@ -37,7 +37,7 @@
     </div>
     <div class="register-photo">
         <div class="form-container">
-            <form action="SuggestionController" method="post">
+            <form action="AddSuggestionController" method="POST">
                 <h2 class="text-center"><strong>Create a new suggestion</strong></h2>
                 <label for="suggestionTitle"><strong>Suggestion Title</strong></label>
                 <div class="form-group"><input class="form-control" id="suggestionTitle" type="text" name="suggestionTitle"></div>

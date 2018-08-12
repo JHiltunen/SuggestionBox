@@ -81,13 +81,13 @@
                     </div>
                     <label>Tila</label>
                     <select class="custom-select" name="status">
-                        <c:if test="${user.status == 'Aktiivinen'}">
-                            <option value="Aktiivinen" selected>Aktiivinen</option>
-                            <option value="Poistettu">Poistettu</option>
+                        <c:if test="${user.status == 'Active'}">
+                            <option value="Active" selected>Active</option>
+                            <option value="Deleted">Deleted</option>
                         </c:if>
-                        <c:if test="${user.status == 'Poistettu'}">
-                            <option value="Aktiivinen">Aktiivinen</option>
-                            <option value="Poistettu" selected>Poistettu</option>
+                        <c:if test="${user.status == 'Deleted'}">
+                            <option value="Active">Active</option>
+                            <option value="Deleted" selected>Deleted</option>
                         </c:if>
                     </select>
 

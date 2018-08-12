@@ -70,11 +70,11 @@
                         <label>Suggestion status</label>
                         <div class="form-group">
                             <select class="form-control" name="status" readonly>
-                                <c:if test="${suggestion.status == 'Aktiivinen'}">
-                                    <option value="Aktiivinen" selected>Aktiivinen</option>
+                                <c:if test="${suggestion.status == 'Active'}">
+                                    <option value="Active" selected>Active</option>
                                 </c:if>
-                                <c:if test="${suggestion.status == 'Poistettu'}">
-                                    <option value="Poistettu" selected>Poistettu</option>
+                                <c:if test="${suggestion.status == 'Deleted'}">
+                                    <option value="Deleted" selected>Deleted</option>
                                 </c:if>
                             </select>
                         </div>
@@ -87,26 +87,26 @@
 
                             <c:if test="${suggestion.procedure.suggestionProcedure == 'NOPROCEDURE'}">
                                 <option value="NOPROCEDURE" selected>No procedure</option>
-                                <option value="WAITINGDECISION">Waiting for the decision</option>
-                                <option value="ACCEPTED">Accepted</option>
+                                <option value="AWAITINGDECISION">Waiting for the decision</option>
+                                <option value="APPROVED">Accepted</option>
                                 <option value="REJECTED">Rejected</option>
                             </c:if>
-                            <c:if test="${suggestion.procedure.suggestionProcedure == 'WAITINGDECISION'}">
+                            <c:if test="${suggestion.procedure.suggestionProcedure == 'AWAITINGDECISION'}">
                                 <option value="NOPROCEDURE">No procedure</option>
-                                <option value="WAITINGDECISION" selected>Waiting for the decision</option>
-                                <option value="ACCEPTED">Accepted</option>
+                                <option value="AWAITINGDECISION" selected>Waiting for the decision</option>
+                                <option value="APPROVED">Accepted</option>
                                 <option value="REJECTED">Rejected</option>
                             </c:if>
-                            <c:if test="${suggestion.procedure.suggestionProcedure == 'ACCEPTED'}">
+                            <c:if test="${suggestion.procedure.suggestionProcedure == 'APPROVED'}">
                                 <option value="NOPROCEDURE">No procedure</option>
-                                <option value="WAITINGDECISION">Waiting for the decision</option>
-                                <option value="ACCEPTED" selected>Accepted</option>
+                                <option value="AWAITINGDECISION">Waiting for the decision</option>
+                                <option value="APPROVED" selected>Accepted</option>
                                 <option value="REJECTED">Rejected</option>
                             </c:if>
                             <c:if test="${suggestion.procedure.suggestionProcedure == 'REJECTED'}">
                                 <option value="NOPROCEDURE">No procedure</option>
-                                <option value="WAITINGDECISION">Waiting for the decision</option>
-                                <option value="ACCEPTED">Accepted</option>
+                                <option value="AWAITINGDECISION">Waiting for the decision</option>
+                                <option value="APPROVED">Accepted</option>
                                 <option value="REJECTED" selected>Rejected</option>
                             </c:if>
                         </select>
