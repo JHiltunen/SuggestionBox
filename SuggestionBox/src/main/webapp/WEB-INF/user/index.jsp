@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-md-4 users-list" id="users-list">
                         <h4>Welcome ${username}</h4>
-                        <a href="SuggestionController"><button type="button" class="btn btn-success float-right management-control">Make a new suggestion</button></a>
+                        <a href="AddSuggestionController"><button type="button" class="btn btn-success float-right management-control">Make a new suggestion</button></a>
                     </div>
                 </div>
             </div>
