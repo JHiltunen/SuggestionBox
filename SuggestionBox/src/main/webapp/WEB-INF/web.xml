@@ -117,8 +117,8 @@
         <url-pattern>/DeleteUserController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SuggestionController</servlet-name>
-        <url-pattern>/SuggestionController</url-pattern>
+        <servlet-name>AddSuggestionController</servlet-name>
+        <url-pattern>/AddSuggestionController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DeleteSuggestionController</servlet-name>
