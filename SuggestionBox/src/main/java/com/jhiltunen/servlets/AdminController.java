@@ -57,23 +57,23 @@ public class AdminController extends HttpServlet {
         request.setAttribute("countOfAllWaitingDecisionSuggestions", allWatitingDecisionSuggestions);
         request.setAttribute("countOfAllNoProcedureSuggestions", allNoProcedureSuggestions);
 
-        String suggestionTitle = request.getParameter("title");
+        String suggestionTitle=  request.getParameter("title");
         String name = request.getParameter("name");
-        
-        if (!(suggestionTitle == null)) {
-            request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestionsWhereTitleContains(suggestionTitle));
+
+        // both parameters are null -> user didn't press search button on suggestiontitle or name forms
+        if ((suggestionTitle == null) && (name == null)) {
+            request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestions());
             request.setAttribute("usersList", databaseHandler.fetchAllusers());
         } else {
-            request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestions());
-            request.setAttribute("usersList", databaseHandler.fetchAllusers());
-        }
-        
-        if (!(name == null)) {
-            request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestions());
-            request.setAttribute("usersList", databaseHandler.searchUserByName(name));
-        } else {
-            request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestions());
-            request.setAttribute("usersList", databaseHandler.fetchAllusers());
+            if (suggestionTitle == null) {
+                // if user searched with name the title attribute is going to be null
+                request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestions());
+                request.setAttribute("usersList", databaseHandler.searchUserByName(name));
+            } else if (name == null) {
+                // if user searched with title the name attribute is going to be null
+                request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestionsWhereTitleContains(suggestionTitle));
+                request.setAttribute("usersList", databaseHandler.fetchAllusers());
+            }
         }
 
         request.getRequestDispatcher("WEB-INF/admin/index.jsp").forward(request, response);
