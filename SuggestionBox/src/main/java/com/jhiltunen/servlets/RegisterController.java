@@ -69,7 +69,7 @@ public class RegisterController extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
-        String creationDate = sdf.format(date);
+        Date creationDate = date;
 
         UserBean user = new UserBean();
 

@@ -79,7 +79,7 @@ public class AddUserController extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
-        String creationDate = sdf.format(date);
+        Date creationDate = date;
         int groupId = Integer.parseInt(request.getParameter("groupId"));
 
         UserBean user = new UserBean();
