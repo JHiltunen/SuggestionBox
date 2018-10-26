@@ -58,7 +58,7 @@
                             </div>
                             <div class="col bg-warning">
                                 <h4 class="text-nowrap text-center text-white" style="margin-top:10px;">Awaiting Decision</h4>
-                                <p class="text-nowrap text-center text-white">${usersWaitingDecisionSuggestions}/${usersAllSuggestions}</p>
+                                <p class="text-nowrap text-center text-white">${usersAWaitingDecisionSuggestions}/${usersAllSuggestions}</p>
                             </div>
                             <div class="col bg-info">
                                 <h4 class="text-nowrap text-center text-white" style="margin-top:10px;">No Procedure</h4>

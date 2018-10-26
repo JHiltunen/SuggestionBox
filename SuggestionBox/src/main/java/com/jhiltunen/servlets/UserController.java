@@ -50,7 +50,7 @@ public class UserController extends HttpServlet {
         int usersAllSuggestions = databaseHandler.countUsersAllSuggestions(userId);
         int usersAcceptedSuggestions = databaseHandler.countUsersAcceptedSuggestions(userId);
         int usersRejectedSuggestions = databaseHandler.countUsersRejectedSuggestions(userId);
-        int usersWaitingDecisionSuggestions = databaseHandler.countUsersRejectedSuggestions(userId);
+        int usersAWaitingDecisionSuggestions = databaseHandler.countUsersAWaitingDecisionSuggestions(userId);
         int usersNoProcedureSuggestions = databaseHandler.countUsersNoProcedureSuggestions(userId);
         
         List<SuggestionBean> usersSuggestions = databaseHandler.fetchAllSuggestionsByUserId(userId);
@@ -58,7 +58,7 @@ public class UserController extends HttpServlet {
         request.setAttribute("usersAllSuggestions", usersAllSuggestions);
         request.setAttribute("usersAcceptedSuggestions", usersAcceptedSuggestions);
         request.setAttribute("usersRejectedSuggestions", usersRejectedSuggestions);
-        request.setAttribute("usersWaitingDecisionSuggestions", usersWaitingDecisionSuggestions);
+        request.setAttribute("usersAWaitingDecisionSuggestions", usersAWaitingDecisionSuggestions);
         request.setAttribute("usersNoProcedureSuggestions", usersNoProcedureSuggestions);
         
         String suggestionTitle = request.getParameter("title");
