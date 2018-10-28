@@ -38,12 +38,12 @@
     <div class="register-photo">
         <div class="form-container">
             <form action="AddSuggestionController" method="POST">
-                <h2 class="text-center"><strong>Create a new suggestion</strong></h2>
+                <h2 class="text-center"><strong>Make a new suggestion</strong></h2>
                 <label for="suggestionTitle"><strong>Suggestion Title</strong></label>
                 <div class="form-group"><input class="form-control" id="suggestionTitle" type="text" name="suggestionTitle"></div>
                 <label for="suggestionDescription"><strong>Suggestion Description</strong></label>
                 <div class="form-group"><textarea class="form-control" id="suggestionDescription" name="suggestionDescription"></textarea></div>
-                <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Create Suggestion</button></div>
+                <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Make Suggestion</button></div>
             </form>
         </div>
     </div>
