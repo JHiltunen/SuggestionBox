@@ -70,16 +70,16 @@
                         <input type="text" class="form-control" name="phone" value="${user.phone}" maxlength="15">
                     </div>
 
-                    <label>Luontipaivays</label>
+                    <label>User creation date</label>
                     <div class="form-group">
                         <input type="text" class="form-control" name="creationDate" value="${user.creationDate}" readonly>
                     </div>
 
-                    <label>Ryhmä id</label>
+                    <label>Group id</label>
                     <div class="form-group">
                         <input type="number" class="form-control" min="1" max="3" name="groupId" value="${user.groupID}" readonly>
                     </div>
-                    <label>Tila</label>
+                    <label>Status</label>
                     <select class="custom-select" name="status">
                         <c:if test="${user.status == 'Active'}">
                             <option value="Active" selected>Active</option>
