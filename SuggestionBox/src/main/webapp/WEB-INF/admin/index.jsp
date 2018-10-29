@@ -97,7 +97,7 @@
                         <c:forEach items="${usersList}" var="currentUser">
                             <div class="user-card">
                                 <div class="row">
-                                    <div class="col user-img-col" style="max-height:50px;"><img class="img-fluid" src="assets/img/avatar.jpg" style="max-width:50px;height:50px;"><span>${currentUser.firstname} ${currentUser.lastname}</span></div>
+                                    <div class="col user-img-col" style="max-height:50px;"><img class="img-fluid" src="assets/img/blank-profile-picture-973460_640.png" style="max-width:50px;height:50px;"><span>${currentUser.firstname} ${currentUser.lastname}</span></div>
                                     <div class="col-12">
                                         <p>Email: ${currentUser.email}</p>
                                         <p>Phone: ${currentUser.phone}</p>
