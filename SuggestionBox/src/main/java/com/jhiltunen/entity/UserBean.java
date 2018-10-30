@@ -21,7 +21,7 @@ public class UserBean implements Serializable {
     private String username;
     private String password;
     private String phone;
-    private Date creationDate;
+    private String creationDate;
     private int groupID;
     private Status status;
 
@@ -81,11 +81,11 @@ public class UserBean implements Serializable {
         this.phone = phone;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 

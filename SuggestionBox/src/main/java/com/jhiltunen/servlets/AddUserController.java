@@ -96,7 +96,7 @@ public class AddUserController extends HttpServlet {
 
         user.setPhone(phone);
 
-        user.setCreationDate(creationDate);
+        user.setCreationDate(sdf.format(creationDate));
 
         user.setGroupID(groupId);
 

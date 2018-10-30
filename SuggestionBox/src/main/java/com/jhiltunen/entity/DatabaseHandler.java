@@ -340,7 +340,7 @@ public class DatabaseHandler {
                     loggedIn.setEmail(resultSet.getString("email"));
                     loggedIn.setUsername(resultSet.getString("username"));
                     loggedIn.setPhone(resultSet.getString("phone"));
-                    loggedIn.setCreationDate(resultSet.getDate("userCreationDate"));
+                    loggedIn.setCreationDate(resultSet.getString("userCreationDate"));
                     loggedIn.setGroupID(resultSet.getInt("groupId"));
                     loggedIn.setStatus(Status.valueOf(resultSet.getString("status")));
 
@@ -849,7 +849,7 @@ public class DatabaseHandler {
                 user.setEmail(resultSet.getString("email"));
                 user.setUsername(resultSet.getString("username"));
                 user.setPhone(resultSet.getString("phone"));
-                user.setCreationDate(resultSet.getDate("userCreationDate"));
+                user.setCreationDate(resultSet.getString("userCreationDate"));
                 user.setGroupID(Integer.parseInt(resultSet.getString("groupId")));
                 user.setStatus(Status.valueOf(resultSet.getString("status")));
 
@@ -911,7 +911,7 @@ public class DatabaseHandler {
                 user.setEmail(resultSet.getString("email"));
                 user.setUsername(resultSet.getString("username"));
                 user.setPhone(resultSet.getString("phone"));
-                user.setCreationDate(resultSet.getDate("userCreationDate"));
+                user.setCreationDate(resultSet.getString("userCreationDate"));
                 user.setGroupID(Integer.parseInt(resultSet.getString("groupId")));
                 user.setStatus(Status.valueOf(resultSet.getString("status")));
 
@@ -1238,7 +1238,7 @@ public class DatabaseHandler {
                 user.setEmail(resultSet.getString("email"));
                 user.setUsername(resultSet.getString("username"));
                 user.setPhone(resultSet.getString("phone"));
-                user.setCreationDate(resultSet.getDate("userCreationDate"));
+                user.setCreationDate(resultSet.getString("userCreationDate"));
                 user.setGroupID(resultSet.getInt("groupId"));
                 user.setStatus(Status.valueOf(resultSet.getString("status")));
 
