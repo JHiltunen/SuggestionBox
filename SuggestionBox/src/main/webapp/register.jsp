@@ -38,11 +38,11 @@
         <div class="login-clean">
             <form action="register" method="post">
                 <h2 class="text-center"><strong>Create</strong> an account.</h2>
-                <div class="form-group"><input class="form-control" type="text" name="firstname" placeholder="Firstname"></div>
-                <div class="form-group"><input class="form-control" type="text" name="lastname" placeholder="Lastname"></div>
-                <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
-                <div class="form-group"><input class="form-control" type="tel" name="phone" placeholder="Phone"></div>
-                <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Username"></div>
+                <div class="form-group"><input class="form-control" type="text" name="firstname" placeholder="Firstname" value="${user.firstname}"></div>
+                <div class="form-group"><input class="form-control" type="text" name="lastname" placeholder="Lastname" value="${user.lastname}"></div>
+                <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email" value="${user.email}"></div>
+                <div class="form-group"><input class="form-control" type="tel" name="phone" placeholder="Phone" value="${user.phone}"></div>
+                <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Username" value="${user.username}"></div>
                 <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
                 <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Register</button></div><a href="index.jsp" class="already">You already have an account? Login here.</a>
             </form>

@@ -134,6 +134,7 @@ public class RegisterController extends HttpServlet {
         } else {
             // Adding user fails
             request.setAttribute("errors", errors);
+            request.setAttribute("user", user);
             request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
