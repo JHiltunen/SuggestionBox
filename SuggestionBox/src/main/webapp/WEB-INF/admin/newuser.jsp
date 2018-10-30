@@ -41,25 +41,25 @@
             <form action="AddUserController" method="POST">
                 <h2 class="text-center"><strong>Create</strong> a new user.</h2>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="firstname" placeholder="Firstname" required/>
+                    <input class="form-control" type="text" name="firstname" placeholder="Firstname" value="${user.firstname}" required/>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="lastname" placeholder="Lastname" required></div>
+                    <input class="form-control" type="text" name="lastname" placeholder="Lastname" value="${user.lastname}" required></div>
                 <div class="form-group">
-                    <input class="form-control" type="email" name="email" placeholder="Email" required>
+                    <input class="form-control" type="email" name="email" placeholder="Email" value="${user.email}" required>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="tel" name="phone" placeholder="Phone" required>
+                    <input class="form-control" type="tel" name="phone" placeholder="Phone" value="${user.phone}" required>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="username" placeholder="Username" required>
+                    <input class="form-control" type="text" name="username" placeholder="Username" value="${user.username}" required>
                 </div>
                 <div class="form-group">
                     <input class="form-control" type="password" name="password" placeholder="Password" required>
                 </div>
                 <label>Select groupId for the user. <br/>1 = standard user<br/>2 = controlgroup<br/>3 = admin</label>
                 <div class="form-group">
-                    <input class="form-control" type="number" min="1" max="3" name="groupId" placeholder="groupId" required>
+                    <input class="form-control" type="number" min="1" max="3" name="groupId" placeholder="groupId" value="${user.groupID}" required>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit">Create a new User</button>

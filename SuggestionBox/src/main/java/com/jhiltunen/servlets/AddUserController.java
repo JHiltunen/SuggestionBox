@@ -145,6 +145,7 @@ public class AddUserController extends HttpServlet {
         } else {
             // Adding user fails
             request.setAttribute("errors", errors);
+            request.setAttribute("user", user);
             request.getRequestDispatcher("/WEB-INF/admin/newuser.jsp").forward(request, response);
         }
     }
