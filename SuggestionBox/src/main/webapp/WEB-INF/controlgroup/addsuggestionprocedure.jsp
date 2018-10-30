@@ -129,7 +129,7 @@
                     <li class="list-inline-item"><a href="#">Terms</a></li>
                     <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
                 </ul>
-                <p class="copyright">SuggestionBox Â© 2018</p>
+                <p class="copyright">SuggestionBox © 2018</p>
             </footer>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
