@@ -107,7 +107,7 @@ public class LoggedInFilter implements Filter {
         if (loggedIn && ((Integer) session.getAttribute("groupId") == 1 || (Integer) session.getAttribute("groupId") == 2 || (Integer) session.getAttribute("groupId") == 3) && session.getAttribute("userStatus").equals(Status.Active)) {
             chain.doFilter(request, response);
         } else {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath());
         }
     }
 

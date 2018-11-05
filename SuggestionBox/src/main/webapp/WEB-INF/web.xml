@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <filter>
-        <filter-name>EditAndDeleteSuggestionFilter</filter-name>
-        <filter-class>com.jhiltunen.filters.EditAndDeleteSuggestionFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>EditAndDeleteUserFilter</filter-name>
-        <filter-class>com.jhiltunen.filters.EditAndDeleteUserFilter</filter-class>
-    </filter>
-    <filter>
         <filter-name>AdminFilter</filter-name>
         <filter-class>com.jhiltunen.filters.AdminFilter</filter-class>
     </filter>
@@ -20,25 +12,29 @@
         <filter-name>UserFilter</filter-name>
         <filter-class>com.jhiltunen.filters.UserFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>LoggedInFilter</filter-name>
+        <filter-class>com.jhiltunen.filters.LoggedInFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoggedInFilter</filter-name>
+        <url-pattern>/ProfileController</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>UserFilter</filter-name>
         <url-pattern>/UserController</url-pattern>
+        <url-pattern>/AddSuggestionController</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>ControlGroupFilter</filter-name>
         <url-pattern>/ControlGroupController</url-pattern>
+        <url-pattern>/ProcedureController</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
         <url-pattern>/AdminController</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>EditAndDeleteUserFilter</filter-name>
+        <url-pattern>/AddUserController</url-pattern>
         <url-pattern>/EditUserController</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>EditAndDeleteSuggestionFilter</filter-name>
-        <url-pattern>/DeleteSuggestionController</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>RegisterController</servlet-name>

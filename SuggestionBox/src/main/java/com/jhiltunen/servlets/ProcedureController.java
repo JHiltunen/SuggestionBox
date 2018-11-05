@@ -47,12 +47,37 @@ public class ProcedureController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Integer suggestionId = Integer.parseInt(request.getParameter("suggestionId"));
 
-        SuggestionBean suggestion = databaseHandler.fetchSuggestionById(suggestionId);
+        HttpSession session = request.getSession(false);
 
-        request.setAttribute("suggestion", suggestion);
-        request.getRequestDispatcher("/WEB-INF/controlgroup/addsuggestionprocedure.jsp").forward(request, response);
+        if (session == null) {
+            // test if session is still valid
+            response.sendRedirect(request.getContextPath());
+        } else {
+            // get attributes from session
+            Integer groupId = (Integer) session.getAttribute("groupId");
+
+            if (groupId == 1) {
+                // if the user belongs to normal "User" group
+                // then forward to UserController
+                request.getRequestDispatcher("UserController").forward(request, response);
+            } else if (groupId == 2) {
+                // if the user belongs to "Controlgroup" group
+                // then allow the user add/edit the procedure
+                Integer suggestionId = Integer.parseInt(request.getParameter("suggestionId"));
+
+                SuggestionBean suggestion = databaseHandler.fetchSuggestionById(suggestionId);
+
+                request.setAttribute("suggestion", suggestion);
+                request.getRequestDispatcher("/WEB-INF/controlgroup/addsuggestionprocedure.jsp").forward(request, response);
+            } else if (groupId == 3) {
+                // if the user belongs to "Admin" group
+                // then forward to AdminController
+                request.getRequestDispatcher("AdminController").forward(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath());
+            }
+        }
     }
 
     /**

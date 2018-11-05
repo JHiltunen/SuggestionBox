@@ -116,7 +116,7 @@ public class UserFilter implements Filter {
             // user that's loggedIn belongs to admin group and tries to acces user page
             request.getRequestDispatcher("AdminController").forward(req, res);
         } else {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath());
         }
     }
 
