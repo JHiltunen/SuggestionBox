@@ -46,23 +46,23 @@
                         <p>This is your home page. Here you can see all your suggestions and edit/delete them.</p>
                         <hr>
                         <h3>Your Suggestions.</h3>
-                        <p>Number of suggestions: ${usersAllSuggestions}</p>
+                        <p>Number of suggestions: ${countOfUsersAllSuggestions}</p>
                         <div class="row suggestions">
                             <div class="col bg-success">
                                 <h4 class="text-nowrap text-center text-white" style="margin-top:10px;">Approved</h4>
-                                <p class="text-center text-white">${usersAcceptedSuggestions}/${usersAllSuggestions}</p>
+                                <p class="text-center text-white">${countOfUsersAcceptedSuggestions}/${countOfUsersAllSuggestions}</p>
                             </div>
                             <div class="col bg-danger">
                                 <h4 class="text-nowrap text-center text-white" style="margin-top:10px;">Rejected</h4>
-                                <p class="text-center text-white">${usersRejectedSuggestions}/${usersAllSuggestions}</p>
+                                <p class="text-center text-white">${countOfUsersRejectedSuggestions}/${countOfUsersAllSuggestions}</p>
                             </div>
                             <div class="col bg-warning">
                                 <h4 class="text-nowrap text-center text-white" style="margin-top:10px;">Awaiting Decision</h4>
-                                <p class="text-nowrap text-center text-white">${usersAWaitingDecisionSuggestions}/${usersAllSuggestions}</p>
+                                <p class="text-nowrap text-center text-white">${countOfUsersAWaitingDecisionSuggestions}/${countOfUsersAllSuggestions}</p>
                             </div>
                             <div class="col bg-info">
                                 <h4 class="text-nowrap text-center text-white" style="margin-top:10px;">No Procedure</h4>
-                                <p class="text-center text-white">${usersNoProcedureSuggestions}/${usersAllSuggestions}</p>
+                                <p class="text-center text-white">${countOfUsersNoProcedureSuggestions}/${countOfUsersAllSuggestions}</p>
                             </div>
                             <form action="UserController" method="GET">
                                 <input type="text" name="title" placeholder="Search from title"/>

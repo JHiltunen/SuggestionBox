@@ -61,11 +61,11 @@ public class UserController extends HttpServlet {
         List<SuggestionBean> usersSuggestions = databaseHandler.fetchAllSuggestionsByUserId(userId);
         
         // set attributes for how many suggestion there are in total and how many suggestions have specific procedure
-        request.setAttribute("usersAllSuggestions", countOfUsersAllSuggestions);
-        request.setAttribute("usersAcceptedSuggestions", countOfUsersAcceptedSuggestions);
-        request.setAttribute("usersRejectedSuggestions", countOfUsersRejectedSuggestions);
-        request.setAttribute("usersAWaitingDecisionSuggestions", countOfUsersAWaitingDecisionSuggestions);
-        request.setAttribute("usersNoProcedureSuggestions", countOfUsersNoProcedureSuggestions);
+        request.setAttribute("countOfUsersAllSuggestions", countOfUsersAllSuggestions);
+        request.setAttribute("countOfUsersAcceptedSuggestions", countOfUsersAcceptedSuggestions);
+        request.setAttribute("countOfUsersRejectedSuggestions", countOfUsersRejectedSuggestions);
+        request.setAttribute("countOfUsersAWaitingDecisionSuggestions", countOfUsersAWaitingDecisionSuggestions);
+        request.setAttribute("countOfUsersNoProcedureSuggestions", countOfUsersNoProcedureSuggestions);
         
         String suggestionTitle = request.getParameter("title"); // this variable is used when user searches suggestions
         
