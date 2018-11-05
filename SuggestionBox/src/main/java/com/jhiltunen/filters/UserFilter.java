@@ -106,7 +106,7 @@ public class UserFilter implements Filter {
         
         boolean loggedIn = session != null && session.getAttribute("userId") != null && session.getAttribute("username") != null && session.getAttribute("userStatus") != null && session.getAttribute("groupId") != null; // attributes from session are not null
         
-        // allow only ("basic") users
+        // allow only ("normal") users (users that belong to User group)
         if (loggedIn && (Integer) session.getAttribute("groupId") == 1 && session.getAttribute("userStatus").equals(Status.Active)) {
             chain.doFilter(request, response);
         } else if (loggedIn && (Integer) session.getAttribute("groupId") == 2) {

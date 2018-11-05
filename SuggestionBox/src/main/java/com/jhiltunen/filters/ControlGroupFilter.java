@@ -106,7 +106,7 @@ public class ControlGroupFilter implements Filter {
         
         boolean loggedIn = session != null && session.getAttribute("userId") != null && session.getAttribute("username") != null && session.getAttribute("userStatus") != null && session.getAttribute("groupId") != null; // attributes from session are not null
         
-        // allow only control group users
+        // allow only controlgroup users
         if (loggedIn && (Integer) session.getAttribute("groupId") == 2 && session.getAttribute("userStatus").equals(Status.Active)) {
             chain.doFilter(request, response);
         } else if (loggedIn && (Integer) session.getAttribute("groupId") == 1) {
