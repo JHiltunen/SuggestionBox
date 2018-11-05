@@ -35,18 +35,25 @@ public class DeleteSuggestionController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        int groupId = (Integer) session.getAttribute("groupId");
+        // make sure that user is logged in
+        if (session == null || session.getAttribute("groupId") == null) {
+            response.sendRedirect(request.getContextPath());
+        } else {
+            int groupId = (Integer) session.getAttribute("groupId");
 
-        Integer suggestionId = Integer.parseInt(request.getParameter("suggestionId"));
+            Integer suggestionId = Integer.parseInt(request.getParameter("suggestionId"));
 
-        if (groupId == 1) {
-            request.setAttribute("suggestionId", suggestionId);
-            request.getRequestDispatcher("/WEB-INF/user/deletesuggestion.jsp").forward(request, response);
-        } else if (groupId == 2) {
-            request.getRequestDispatcher("ControlGroupController").forward(request, response);
-        } else if (groupId == 3) {
-            request.setAttribute("suggestionId", suggestionId);
-            request.getRequestDispatcher("/WEB-INF/admin/deletesuggestion.jsp").forward(request, response);
+            // make sure that user belongs to correct group
+            // only users that belong to normal User group or Admin group can delete suggestions
+            if (groupId == 1) {
+                request.setAttribute("suggestionId", suggestionId);
+                request.getRequestDispatcher("/WEB-INF/user/deletesuggestion.jsp").forward(request, response);
+            } else if (groupId == 2) {
+                request.getRequestDispatcher("ControlGroupController").forward(request, response);
+            } else if (groupId == 3) {
+                request.setAttribute("suggestionId", suggestionId);
+                request.getRequestDispatcher("/WEB-INF/admin/deletesuggestion.jsp").forward(request, response);
+            }
         }
     }
 
@@ -65,6 +72,7 @@ public class DeleteSuggestionController extends HttpServlet {
         HttpSession session = request.getSession();
 
         int suggestionID = Integer.parseInt(request.getParameter("suggestionID"));
+        
         Integer userId = (Integer) session.getAttribute("userId");
         int groupId = (Integer) session.getAttribute("groupId");
 

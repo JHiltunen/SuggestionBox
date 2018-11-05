@@ -35,9 +35,14 @@ public class ProfileController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
-        if (session != null) {
+        // make sure that user is logged in
+        if (session == null || session.getAttribute("groupId") == null) {
+            response.sendRedirect(request.getContextPath());
+        } else {
             DatabaseHandler databaseHandler = new DatabaseHandler();
             UserBean user = databaseHandler.fetchUserById((int) session.getAttribute("userId"));
+            
+            // forward user to the correct page
             if ((int) session.getAttribute("groupId") == 1) {
                 request.setAttribute("user", user);
                 request.getRequestDispatcher("/WEB-INF/user/profile.jsp").forward(request, response);
@@ -50,10 +55,7 @@ public class ProfileController extends HttpServlet {
             } else {
                 response.sendRedirect(request.getContextPath());
             }
-        } else {
-            response.sendRedirect(request.getContextPath());
         }
-
     }
 
     /**
@@ -70,11 +72,11 @@ public class ProfileController extends HttpServlet {
 
         HttpSession session = request.getSession();
         int groupId = (int) session.getAttribute("groupId");
-        
+
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        
+
         UserBean user = new UserBean();
-        
+
         user.setUserID(Integer.parseInt(request.getParameter("userId")));
         user.setFirstname(request.getParameter("firstname"));
         user.setLastname(request.getParameter("lastname"));
@@ -83,9 +85,9 @@ public class ProfileController extends HttpServlet {
         user.setPhone(request.getParameter("phone"));
         user.setGroupID(groupId);
         user.setStatus(Status.valueOf(request.getParameter("status")));
-        
+
         databaseHandler.updateUser(user);
-        
+
         if (groupId == 1) {
             request.getRequestDispatcher("UserController").forward(request, response);
         } else if (groupId == 2) {

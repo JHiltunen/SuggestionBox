@@ -63,6 +63,7 @@ public class RegisterController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // get the information that was filled to the registration form
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
         String email = request.getParameter("email");
@@ -85,11 +86,13 @@ public class RegisterController extends HttpServlet {
 
         user.setPhone(phone);
 
+        // format the creation date to match MySQl syntax
         user.setCreationDate(sdf.format(creationDate));
 
+        // as a default user belongs to normal User group
         user.setGroupID(1);
         
-        // check for errors before adding anything to database
+        // check for errors before adding to database
         List<String> errors = new ArrayList<>();
 
         if (user.getFirstname().isEmpty()) {
@@ -117,6 +120,7 @@ public class RegisterController extends HttpServlet {
         }
 
         if (!user.getPhone().matches(phoneRegex)) {
+            // validation for Finnish phone numbers
             errors.add("Invalid phone number");
         }
 
@@ -130,6 +134,7 @@ public class RegisterController extends HttpServlet {
         }
 
         if (errors.isEmpty() && databaseHandler.addUser(user)) {
+            // the new user was added succesfully to database
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } else {
             // Adding user fails

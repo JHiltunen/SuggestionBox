@@ -34,35 +34,44 @@ public class ControlGroupController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // do this for both GET and POST requests
         
         HttpSession session = request.getSession();
         
+        // get the userId from the session
         int userId = (int) session.getAttribute("userId");
         
+        // fetch information about the user that's logged in
         UserBean user = databaseHandler.fetchUserById(userId);
         
+        // set the user information (from database) to session so it can be shown on home page
         session.setAttribute("userId", user.getUserID());
         session.setAttribute("username", user.getUsername());
         session.setAttribute("userStatus", user.getStatus());
         session.setAttribute("groupId", user.getGroupID());
         
-        int allSuggestions = databaseHandler.countAllSuggestions();
-        int allAcceptedSuggestions = databaseHandler.countAllAcceptedSuggestions();
-        int allRejectedSuggestions = databaseHandler.countAllRejectedSuggestions();
-        int allWatitingDecisionSuggestions = databaseHandler.countAllWaitingDecisionSuggestions();
-        int allNoProcedureSuggestions = databaseHandler.countAllNoProcedureSuggestions();
+        // fetch number of all suggestions and fetch number of suggestions with each procedure
+        int countOfAllSuggestions = databaseHandler.countAllSuggestions();
+        int countOfAllAcceptedSuggestions = databaseHandler.countAllAcceptedSuggestions();
+        int countOfAllRejectedSuggestions = databaseHandler.countAllRejectedSuggestions();
+        int countOfAllWatitingDecisionSuggestions = databaseHandler.countAllWaitingDecisionSuggestions();
+        int countOfAllNoProcedureSuggestions = databaseHandler.countAllNoProcedureSuggestions();
         
-        request.setAttribute("countOfAllSuggestions", allSuggestions);
-        request.setAttribute("countOfAllAcceptedSuggestions", allAcceptedSuggestions);
-        request.setAttribute("countOfAllRejectedSuggestions", allRejectedSuggestions);
-        request.setAttribute("countOfAllWaitingDecisionSuggestions", allWatitingDecisionSuggestions);
-        request.setAttribute("countOfAllNoProcedureSuggestions", allNoProcedureSuggestions);
+        // set attributes for how many suggestion there are in total and how many suggestions have specific procedure
+        request.setAttribute("countOfAllSuggestions", countOfAllSuggestions);
+        request.setAttribute("countOfAllAcceptedSuggestions", countOfAllAcceptedSuggestions);
+        request.setAttribute("countOfAllRejectedSuggestions", countOfAllRejectedSuggestions);
+        request.setAttribute("countOfAllWaitingDecisionSuggestions", countOfAllWatitingDecisionSuggestions);
+        request.setAttribute("countOfAllNoProcedureSuggestions", countOfAllNoProcedureSuggestions);
         
-        String suggestionTitle = request.getParameter("title");
+        String suggestionTitle = request.getParameter("title"); // this variable is used when user searches suggestions
         
         if (!(suggestionTitle == null)) {
+            // the title prameter isn't null -> user searched suggestion
+            // fetch only suggestions that has the search keyword in suggestion title
             request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestionsWhereTitleContains(suggestionTitle));
         } else {
+            // fetch all suggestions
             request.setAttribute("suggestionsList", databaseHandler.fetchAllSuggestions());
         }
 

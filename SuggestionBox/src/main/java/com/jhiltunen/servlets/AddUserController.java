@@ -50,18 +50,25 @@ public class AddUserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
-        Integer groupId = (Integer) session.getAttribute("groupId");
-        
-        if (groupId == 1) {
-            request.getRequestDispatcher("UserController").forward(request, response);
-        } else if (groupId == 2) {
-            request.getRequestDispatcher("ControlGroupController").forward(request, response);
-        } else if (groupId == 3) {
-            request.getRequestDispatcher("/WEB-INF/admin/newuser.jsp").forward(request, response);
+
+        // make sure that user is logged in
+        if (session == null || session.getAttribute("groupId") == null) {
+            response.sendRedirect(request.getContextPath());
+        } else {
+            Integer groupId = (Integer) session.getAttribute("groupId");
+
+            // make sure that user belongs to correct group
+            // only admin users can add new users
+            if (groupId == 1) {
+                request.getRequestDispatcher("UserController").forward(request, response);
+            } else if (groupId == 2) {
+                request.getRequestDispatcher("ControlGroupController").forward(request, response);
+            } else if (groupId == 3) {
+                request.getRequestDispatcher("/WEB-INF/admin/newuser.jsp").forward(request, response);
+            }
         }
     }
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -73,6 +80,7 @@ public class AddUserController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // get the information from the form that the user filled in
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
         String email = request.getParameter("email");
@@ -82,6 +90,7 @@ public class AddUserController extends HttpServlet {
         Date creationDate = date;
         int groupId = Integer.parseInt(request.getParameter("groupId"));
 
+        // create object from the information that user filled in to the form
         UserBean user = new UserBean();
 
         user.setFirstname(firstname);
@@ -100,7 +109,7 @@ public class AddUserController extends HttpServlet {
 
         user.setGroupID(groupId);
 
-        // check for errors before adding anything to database
+        // check for errors before adding to database
         List<String> errors = new ArrayList<>();
 
         if (user.getFirstname().isEmpty()) {
@@ -128,6 +137,7 @@ public class AddUserController extends HttpServlet {
         }
 
         if (!user.getPhone().matches(phoneRegex)) {
+            // validation for Finnish phone numbers
             errors.add("Invalid phone number");
         }
 
@@ -136,7 +146,6 @@ public class AddUserController extends HttpServlet {
         }
 
         if (!databaseHandler.usernameAvailable(user.getUsername())) {
-            System.out.println("Username on jo käytössä");
             errors.add("Username is already in use!");
         }
 

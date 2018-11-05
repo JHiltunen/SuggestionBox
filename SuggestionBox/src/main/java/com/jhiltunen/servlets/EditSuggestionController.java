@@ -41,7 +41,8 @@ public class EditSuggestionController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        if (session == null) {
+        // make sure that use is logged in
+        if (session == null || session.getAttribute("groupId") == null) {
             response.sendRedirect(request.getContextPath());
         } else {
             Integer groupId = (Integer) session.getAttribute("groupId");
@@ -50,11 +51,14 @@ public class EditSuggestionController extends HttpServlet {
 
             SuggestionBean suggestion = databaseHandler.fetchSuggestionById(suggestionId);
 
+            // make sure that user belongs to correct group
+            // only users that belong to normal User group or Admin group can edit users
             if (groupId == 1) {
                 if (suggestion == null) {
                     request.getRequestDispatcher("UserController").forward(request, response);
                 } else {
                     if (userId == suggestion.getUserID()) {
+                        // make sure that user (who belongs to normal User group) is only allowed to edit his/her own suggestions
                         request.setAttribute("suggestion", suggestion);
                         request.getRequestDispatcher("/WEB-INF/user/editsuggestion.jsp").forward(request, response);
                     } else {
@@ -113,20 +117,17 @@ public class EditSuggestionController extends HttpServlet {
         List<String> errors = new ArrayList<>();
 
         if (suggestion.getTitle().isEmpty()) {
-            System.out.println("Aloitenimi on tyhjä");
-            errors.add("Please fill in Aloitteen nimi");
+            errors.add("Please fill in Suggestion title");
         }
 
         if (suggestion.getDescription().isEmpty()) {
-            System.out.println("Aloitekuvaus on tyhjä");
-            errors.add("Please fill in aloitteen kuvaus");
+            errors.add("Please fill in Suggestion description");
         }
 
         if (groupId == 1) {
             // in case of user edits his/her own suggestion
             // get the userId from HttpSession and set it as the userId of the suggestion
             // this is done to prevent user able to edit any user's suggestion
-            // preventing user to acces to edit other (than his/her own) suggestions is also done in editsuggestion.jsp page
             suggestion.setUserID(userIdFromSession);
             if (errors.isEmpty() && databaseHandler.updateSuggestionByUserId(suggestion)) {
                 request.getRequestDispatcher("UserController").forward(request, response);

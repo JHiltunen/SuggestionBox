@@ -35,7 +35,7 @@ public class AddSuggestionController extends HttpServlet {
     // create new SimpleDateFormat
     // because the creation date of the suggestion needs to be changed to the following pattern
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -48,16 +48,23 @@ public class AddSuggestionController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        
-        Integer groupId = (Integer) session.getAttribute("groupId");
-        
-        if (groupId == 1) {
-            request.getRequestDispatcher("/WEB-INF/user/newsuggestion.jsp").forward(request, response);
-        } else if (groupId == 2) {
-            request.getRequestDispatcher("ControlGroupController").forward(request, response);
-        } else if (groupId == 3) {
-            request.getRequestDispatcher("AdminController").forward(request, response);
+        HttpSession session = request.getSession(false);
+
+        // make sure that user is logged in
+        if (session == null || session.getAttribute("groupId") == null) {
+            response.sendRedirect(request.getContextPath());
+        } else {
+            Integer groupId = (Integer) session.getAttribute("groupId");
+
+            // make sure that user belongs to correct group
+            // only users that belong to User group are allowed to make new suggestions
+            if (groupId == 1) {
+                request.getRequestDispatcher("/WEB-INF/user/newsuggestion.jsp").forward(request, response);
+            } else if (groupId == 2) {
+                request.getRequestDispatcher("ControlGroupController").forward(request, response);
+            } else if (groupId == 3) {
+                request.getRequestDispatcher("AdminController").forward(request, response);
+            }
         }
     }
 
@@ -74,33 +81,33 @@ public class AddSuggestionController extends HttpServlet {
             throws ServletException, IOException {
         String suggestionName = request.getParameter("suggestionTitle");
         String suggestionDescription = request.getParameter("suggestionDescription");
-        
+
         HttpSession session = request.getSession();
-        
+
         Integer userId = (Integer) session.getAttribute("userId");
-        
+
         // create object from the information user filled in to the form
         SuggestionBean suggestionBean = new SuggestionBean();
-        
+
         ProcedureBean procedure = new ProcedureBean();
         procedure.setSuggestionProcedure(ProcedureStatus.NOPROCEDURE);
-        
+
         suggestionBean.setTitle(suggestionName);
         suggestionBean.setDescription(suggestionDescription);
         suggestionBean.setCreationDate(sdf.format(date));
         suggestionBean.setUserID(userId);
         suggestionBean.setProcedure(procedure);
-                
+
         List<String> errors = new ArrayList<>();
-        
+
         if (suggestionBean.getTitle().isEmpty()) {
             errors.add("Suggestion name is missing");
         }
-        
+
         if (suggestionBean.getDescription().isEmpty()) {
             errors.add("Suggestion description is missing");
         }
-        
+
         if (errors.isEmpty() && databaseHandler.addSuggestion(suggestionBean)) {
             request.getRequestDispatcher("UserController").forward(request, response);
         } else {

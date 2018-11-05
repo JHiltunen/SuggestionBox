@@ -38,7 +38,7 @@ public class LoginController extends HttpServlet {
         // user tries to acces directly from url
         HttpSession session = request.getSession();
         
-        if (session == null) {
+        if (session == null || session.getAttribute("groupId") == null) {
             response.sendRedirect("index.jsp");
         } else {
             Integer groupId = (Integer) session.getAttribute("groupId");
@@ -83,7 +83,6 @@ public class LoginController extends HttpServlet {
         }
 
         if (errors.isEmpty()) {
-            System.out.println("Ei tyhjiä kenttiä loginControllerissa");
             UserBean userWithCredentials = new UserBean();
 
             userWithCredentials.setUsername(username);
@@ -92,7 +91,7 @@ public class LoginController extends HttpServlet {
             UserBean user = databaseHandler.verifyLogin(userWithCredentials);
 
             if (user != null) {
-                // DatabaseHandler verifyLogin method returned UserBean (and not null) -> forward the user to correct landing page
+                // DatabaseHandler verifyLogin method returned UserBean (and not null) -> forward the user to correct home page
                 switch (user.getGroupID()) {
 
                     case 1:
@@ -110,7 +109,7 @@ public class LoginController extends HttpServlet {
 
             } else {
                 // there was no user with credentials that user filled in
-                // -> redirect to verifyLogin page with error
+                // -> redirect to login (index) page with error message
                 request.setAttribute("errors", "Wrong username or password!");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
@@ -128,6 +127,7 @@ public class LoginController extends HttpServlet {
         request.getSession().setAttribute("username", user.getUsername());
         request.getSession().setAttribute("userStatus", user.getStatus());
         request.getSession().setAttribute("groupId", user.getGroupID());
+        
         request.getRequestDispatcher("UserController").forward(request, response);
     }
 
@@ -136,6 +136,7 @@ public class LoginController extends HttpServlet {
         request.getSession().setAttribute("username", user.getUsername());
         request.getSession().setAttribute("userStatus", user.getStatus());
         request.getSession().setAttribute("groupId", user.getGroupID());
+        
         request.getRequestDispatcher("ControlGroupController").forward(request, response);
     }
     

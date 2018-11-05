@@ -59,6 +59,7 @@ public class EditUserController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // get the user information from the user edit form        
         int userId = Integer.parseInt(request.getParameter("userId"));
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
@@ -67,13 +68,6 @@ public class EditUserController extends HttpServlet {
         String phone = request.getParameter("phone");
         int groupId = Integer.parseInt(request.getParameter("groupId"));
         String status = request.getParameter("status");
-
-        System.out.println("Etunimi: " + firstname);
-        System.out.println("Sukunimi: " + lastname);
-        System.out.println("Email: " + email);
-        System.out.println("Phone: " + phone);
-        System.out.println("GroupId: " + groupId);
-        System.out.println("Status: " + status);
 
         UserBean user = new UserBean();
 
@@ -86,7 +80,7 @@ public class EditUserController extends HttpServlet {
         user.setGroupID(groupId);
         user.setStatus(Status.valueOf(status));
 
-        // check for errors before adding anything to database
+        // check for errors before adding to database
         List<String> errors = new ArrayList<>();
 
         if (user.getFirstname().isEmpty()) {
@@ -117,10 +111,12 @@ public class EditUserController extends HttpServlet {
             errors.add("Please fill in group id");
         }
 
-//        if (user.getStatus().displayName().isEmpty()) {
-//            errors.add("Please choose the correct status for the user");
-//        }
+        if (user.getStatus().displayName().isEmpty()) {
+            errors.add("Please choose the correct status for the user");
+        }
+        
         if (errors.isEmpty() && databaseHandler.updateUser(user)) {
+            // Changes succesfully saved to database
             request.getRequestDispatcher("AdminController").forward(request, response);
         } else {
             // Editing user fails

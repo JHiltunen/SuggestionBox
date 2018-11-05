@@ -35,37 +35,46 @@ public class UserController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // do this for both GET and POST requests
         
         HttpSession session = request.getSession(false);
         
+        // get the userId from the session
         Integer userId = (Integer) session.getAttribute("userId");
         
+        // fetch information aobut the user that's logged in
         UserBean user = databaseHandler.fetchUserById(userId);
         
+        // set the user information (from database) to session so it can be shown on home page
         session.setAttribute("userId", user.getUserID());
         session.setAttribute("username", user.getUsername());
         session.setAttribute("userStatus", user.getStatus());
         session.setAttribute("groupId", user.getGroupID());
         
-        int usersAllSuggestions = databaseHandler.countUsersAllSuggestions(userId);
-        int usersAcceptedSuggestions = databaseHandler.countUsersAcceptedSuggestions(userId);
-        int usersRejectedSuggestions = databaseHandler.countUsersRejectedSuggestions(userId);
-        int usersAWaitingDecisionSuggestions = databaseHandler.countUsersAWaitingDecisionSuggestions(userId);
-        int usersNoProcedureSuggestions = databaseHandler.countUsersNoProcedureSuggestions(userId);
+        // fetch number of all (user's own) suggestions and fetch number of (user's own) suggestions with each procedure
+        int countOfUsersAllSuggestions = databaseHandler.countUsersAllSuggestions(userId);
+        int countOfUsersAcceptedSuggestions = databaseHandler.countUsersAcceptedSuggestions(userId);
+        int countOfUsersRejectedSuggestions = databaseHandler.countUsersRejectedSuggestions(userId);
+        int countOfUsersAWaitingDecisionSuggestions = databaseHandler.countUsersAWaitingDecisionSuggestions(userId);
+        int countOfUsersNoProcedureSuggestions = databaseHandler.countUsersNoProcedureSuggestions(userId);
         
         List<SuggestionBean> usersSuggestions = databaseHandler.fetchAllSuggestionsByUserId(userId);
         
-        request.setAttribute("usersAllSuggestions", usersAllSuggestions);
-        request.setAttribute("usersAcceptedSuggestions", usersAcceptedSuggestions);
-        request.setAttribute("usersRejectedSuggestions", usersRejectedSuggestions);
-        request.setAttribute("usersAWaitingDecisionSuggestions", usersAWaitingDecisionSuggestions);
-        request.setAttribute("usersNoProcedureSuggestions", usersNoProcedureSuggestions);
+        // set attributes for how many suggestion there are in total and how many suggestions have specific procedure
+        request.setAttribute("usersAllSuggestions", countOfUsersAllSuggestions);
+        request.setAttribute("usersAcceptedSuggestions", countOfUsersAcceptedSuggestions);
+        request.setAttribute("usersRejectedSuggestions", countOfUsersRejectedSuggestions);
+        request.setAttribute("usersAWaitingDecisionSuggestions", countOfUsersAWaitingDecisionSuggestions);
+        request.setAttribute("usersNoProcedureSuggestions", countOfUsersNoProcedureSuggestions);
         
-        String suggestionTitle = request.getParameter("title");
+        String suggestionTitle = request.getParameter("title"); // this variable is used when user searches suggestions
         
         if (!(suggestionTitle == null)) {
+            // the title prameter isn't null -> user searched suggestion
+            // fetch only suggestions that has the search keyword in suggestion title
             request.setAttribute("usersSuggestions", databaseHandler.fetchUsersAllSuggestionsWhereTitleContains(suggestionTitle, userId));
         } else {
+            // fetch all suggestions
             request.setAttribute("usersSuggestions", databaseHandler.fetchAllSuggestionsByUserId(userId));
         }
         

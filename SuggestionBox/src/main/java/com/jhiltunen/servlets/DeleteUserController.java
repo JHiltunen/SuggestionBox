@@ -39,8 +39,9 @@ public class DeleteUserController extends HttpServlet {
 
         if (session == null || session.getAttribute("groupId") == null) {
             response.sendRedirect(request.getContextPath());
-            System.out.println("404 not found");
         } else {
+            // make sure that the user belongs to correct group
+            // only admin users can delete users
             int groupId = Integer.parseInt(request.getParameter("groupId"));
 
             if (groupId == 1) {
@@ -70,6 +71,7 @@ public class DeleteUserController extends HttpServlet {
         int groupId = Integer.parseInt(request.getParameter("groupId"));
         int userId = Integer.parseInt(request.getParameter("userId"));
 
+        // make sure that user who tries to delete another user, belongs to Admin group
         if (groupId == 1) {
             request.getRequestDispatcher("UserController").forward(request, response);
         } else if (groupId == 2) {

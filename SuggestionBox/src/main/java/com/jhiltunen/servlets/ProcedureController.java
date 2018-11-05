@@ -50,8 +50,8 @@ public class ProcedureController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            // test if session is still valid
+        // make sure that user is logged in
+        if (session == null || session.getAttribute("groupId") == null) {
             response.sendRedirect(request.getContextPath());
         } else {
             // get attributes from session
