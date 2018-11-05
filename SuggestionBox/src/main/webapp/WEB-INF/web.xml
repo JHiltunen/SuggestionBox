@@ -19,6 +19,8 @@
     <filter-mapping>
         <filter-name>LoggedInFilter</filter-name>
         <url-pattern>/ProfileController</url-pattern>
+        <url-pattern>/EditSuggestionController</url-pattern>
+        <url-pattern>/DeleteSuggestionController</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>UserFilter</filter-name>

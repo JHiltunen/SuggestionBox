@@ -7,11 +7,11 @@ package com.jhiltunen.servlets;
 
 import com.jhiltunen.entity.DatabaseHandler;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteUserController extends HttpServlet {
 
     private DatabaseHandler databaseHandler = new DatabaseHandler();
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -33,8 +34,26 @@ public class DeleteUserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int userId = Integer.parseInt(request.getParameter("userId"));
-        request.setAttribute("userId", userId);
-        request.getRequestDispatcher("/WEB-INF/admin/deleteuser.jsp").forward(request, response);
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("groupId") == null) {
+            response.sendRedirect(request.getContextPath());
+            System.out.println("404 not found");
+        } else {
+            int groupId = Integer.parseInt(request.getParameter("groupId"));
+
+            if (groupId == 1) {
+                request.getRequestDispatcher("UserController").forward(request, response);
+            } else if (groupId == 2) {
+                request.getRequestDispatcher("ControlGroupController").forward(request, response);
+            } else if (groupId == 3) {
+                request.setAttribute("userId", userId);
+                request.getRequestDispatcher("/WEB-INF/admin/deleteuser.jsp").forward(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath());
+            }
+        }
     }
 
     /**
@@ -48,11 +67,19 @@ public class DeleteUserController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        int userID = Integer.parseInt(request.getParameter("userId"));
-        
-        databaseHandler.deactivateUserByID(userID);
-        request.getRequestDispatcher("AdminController").forward(request, response);
+        int groupId = Integer.parseInt(request.getParameter("groupId"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
+
+        if (groupId == 1) {
+            request.getRequestDispatcher("UserController").forward(request, response);
+        } else if (groupId == 2) {
+            request.getRequestDispatcher("ControlGroupController").forward(request, response);
+        } else if (groupId == 3) {
+            databaseHandler.deactivateUserByID(userId);
+            request.getRequestDispatcher("AdminController").forward(request, response);
+        } else {
+            request.getRequestDispatcher(request.getContextPath());
+        }
     }
 
     /**
