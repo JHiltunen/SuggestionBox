@@ -53,7 +53,7 @@ public class AdminController extends HttpServlet {
         int countOfAllSuggestions = databaseHandler.countAllSuggestions();
         int countOfAllAcceptedSuggestions = databaseHandler.countAllAcceptedSuggestions();
         int countOfAllRejectedSuggestions = databaseHandler.countAllRejectedSuggestions();
-        int countOfAllWatitingDecisionSuggestions = databaseHandler.countAllWaitingDecisionSuggestions();
+        int countOfAllWatitingDecisionSuggestions = databaseHandler.countAllAWaitingDecisionSuggestions();
         int countOfAllNoProcedureSuggestions = databaseHandler.countAllNoProcedureSuggestions();
 
         // set attributes for how many suggestion there are in total and how many suggestions have specific procedure

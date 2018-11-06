@@ -277,7 +277,7 @@ public class DatabaseHandler {
             }
 
             // declare SQL-clause for adding new suggestion
-            String addSuggestionSQL = "INSERT INTO suggestions (suggestionTitle, suggestionDescription, suggestionCreationDate, userId, suggestionprocedure) VALUES(?, ?, ?, ?, ?)";
+            String addSuggestionSQL = "INSERT INTO suggestions (suggestionTitle, suggestionDescription, suggestionCreationDate, userId, suggestionprocedure) VALUES(?, ?, ?, ?, CAST(? AS suggestionprocedure))";
 
             // prepare the sql statement for database
             addSuggestionStatement = connection.prepareStatement(addSuggestionSQL);
@@ -322,7 +322,7 @@ public class DatabaseHandler {
 
             // first find user from database that's username is same as the username given in parameter
             // SQL clause that searches for user with username given in parameter and the status of the user is Active
-            String searchUserByUsername = "SELECT userId, firstname, lastname, email, username, password, phone, userCreationDate, groupId, status FROM users WHERE username=? AND status=?";
+            String searchUserByUsername = "SELECT userId, firstname, lastname, email, username, password, phone, userCreationDate, groupId, userstatus FROM users WHERE username=? AND userstatus=CAST(? AS status)";
 
             // prepare the sql statement for database
             searchClause = connection.prepareStatement(searchUserByUsername);
@@ -435,7 +435,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions made by one user (userId in method parameter) where the suggestionProcedure is "ACCEPTED"
-            String countUsersAcceptedSuggestions = "SELECT COUNT(suggestionProcedure) AS usersAcceptedSuggestions FROM suggestions WHERE suggestionProcedure=? AND userId=?";
+            String countUsersAcceptedSuggestions = "SELECT COUNT(suggestionProcedure) AS usersAcceptedSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure) AND userId=?";
 
             // prepare the SQL statement for database
             countUsersAcceptedSuggestionsStatement = connection.prepareStatement(countUsersAcceptedSuggestions);
@@ -480,7 +480,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions made by one user (userId in method parameter) where the suggestionProcedure is "REJECTED"
-            String countUsersRejectedSuggestions = "SELECT COUNT(suggestionProcedure) AS usersRejectedSuggestions FROM suggestions WHERE suggestionProcedure=? AND userId=?";
+            String countUsersRejectedSuggestions = "SELECT COUNT(suggestionProcedure) AS usersRejectedSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure) AND userId=?";
 
             // prepare the sql statement for database
             countUsersRejectedSuggestionsStatement = connection.prepareStatement(countUsersRejectedSuggestions);
@@ -525,7 +525,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions made by one user (userId in method parameter) where the suggestionProcedure is "AWAITINGDECISION"
-            String countUsersAwaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS usersAWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=? AND userId=?";
+            String countUsersAwaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS usersAWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure) AND userId=?";
 
             // prepare the sql statement for database
             countUsersAwaitingDecisionSuggestionsStatement = connection.prepareStatement(countUsersAwaitingDecisionSuggestions);
@@ -657,7 +657,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions that's suggestionProcedure is "ACCEPTED"
-            String countAllAcceptedSuggestions = "SELECT COUNT(suggestionProcedure) AS allAcceptedSuggestions FROM suggestions WHERE suggestionProcedure=?";
+            String countAllAcceptedSuggestions = "SELECT COUNT(suggestionProcedure) AS allAcceptedSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure)";
 
             // prepare the sql statement for database
             countAllAcceptedSuggestionsStatement = connection.prepareStatement(countAllAcceptedSuggestions);
@@ -701,7 +701,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions that's suggestionProcedure is "REJECTED"
-            String countAllRejectedSuggestions = "SELECT COUNT(suggestionProcedure) AS allRejectedSuggestions FROM suggestions WHERE suggestionProcedure=?";
+            String countAllRejectedSuggestions = "SELECT COUNT(suggestionProcedure) AS allRejectedSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure)";
 
             // prepare the sql statement for database
             countAllRejectedSuggestionsStatement = connection.prepareStatement(countAllRejectedSuggestions);
@@ -728,10 +728,10 @@ public class DatabaseHandler {
     /*
     count number of all suggestions that have "AWAITINGDECISION" procedure
     */
-    public int countAllWaitingDecisionSuggestions() {
+    public int countAllAWaitingDecisionSuggestions() {
 
         Connection connection = null;
-        PreparedStatement countAllWaitingDecisionSuggestionsStatement = null;
+        PreparedStatement countAllAWaitingDecisionSuggestionsStatement = null;
         ResultSet resultSet = null;
 
         try {
@@ -745,15 +745,15 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions that's suggestionProcedure is "AWAITINGDECISION"
-            String countAllWaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS allAWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=?";
+            String countAllAWaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS allWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure)";
 
             // prepare the sql statement for database
-            countAllWaitingDecisionSuggestionsStatement = connection.prepareStatement(countAllWaitingDecisionSuggestions);
+            countAllAWaitingDecisionSuggestionsStatement = connection.prepareStatement(countAllAWaitingDecisionSuggestions);
 
-            countAllWaitingDecisionSuggestionsStatement.setString(1, "AWAITINGDECISION");
+            countAllAWaitingDecisionSuggestionsStatement.setString(1, "AWAITINGDECISION");
 
             // execute the query and save the result to resultSet variable
-            resultSet = countAllWaitingDecisionSuggestionsStatement.executeQuery();
+            resultSet = countAllAWaitingDecisionSuggestionsStatement.executeQuery();
 
             while (resultSet.next()) {
                 return resultSet.getInt("allAWaitingDecisionSuggestions");
@@ -762,7 +762,7 @@ public class DatabaseHandler {
             e.printStackTrace();
         } finally {
             ConnectionManagement.closeResultSet(resultSet);
-            ConnectionManagement.closeStatement(countAllWaitingDecisionSuggestionsStatement);
+            ConnectionManagement.closeStatement(countAllAWaitingDecisionSuggestionsStatement);
             ConnectionManagement.closeConnection(connection);
         }
 
@@ -789,7 +789,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions where suggestionProcedure is "NOPROCEDURE"
-            String countAllNoProcedureSuggestions = "SELECT COUNT(suggestionProcedure) AS allNoProcedureSuggestions FROM suggestions WHERE suggestionProcedure=?";
+            String countAllNoProcedureSuggestions = "SELECT COUNT(suggestionProcedure) AS allNoProcedureSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure)";
 
             // prepare the sql statement for database
             countAllNoProcedureSuggestionsStatement = connection.prepareStatement(countAllNoProcedureSuggestions);
@@ -1362,7 +1362,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that updates suggestions information that's id is same as given in parameter
-            String updateSuggestionSQL = "UPDATE suggestions set suggestionTitle=?, suggestionDescription=?, status=? WHERE suggestionId=?";
+            String updateSuggestionSQL = "UPDATE suggestions set suggestionTitle=?, suggestionDescription=?, suggestionstatus=CAST(? AS status) WHERE suggestionId=?";
 
             // prepare the sql statement for database
             updateSuggestionStatement = connection.prepareStatement(updateSuggestionSQL);
@@ -1406,7 +1406,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that updates suggestions information that's id is same as given in parameter
-            String updateSuggestionSQL = "UPDATE suggestions set suggestionTitle=?, suggestionDescription=?, status=? WHERE suggestionId=? AND userId=?";
+            String updateSuggestionSQL = "UPDATE suggestions set suggestionTitle=?, suggestionDescription=?, suggestionstatus=CAST(? AS status) WHERE suggestionId=? AND userId=?";
 
             // prepare the sql statement for database
             updateSuggestionStatement = connection.prepareStatement(updateSuggestionSQL);
@@ -1446,7 +1446,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that updates suggestion's suggestionprocedure that's suggestionID is same as id given in method parameter
-            String updateSuggestionProcedureSQL = "UPDATE suggestions set suggestionprocedure=? WHERE suggestionId=?";
+            String updateSuggestionProcedureSQL = "UPDATE suggestions set suggestionprocedure=CAST(? AS suggestionprocedure) WHERE suggestionId=?";
 
             // prepare the sql statement for database
             updateSuggestionProcedureStatement = connection.prepareStatement(updateSuggestionProcedureSQL);
@@ -1526,7 +1526,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that updates users information that's id is same as given in parameter object
-            String deactivateUserSQL = "UPDATE users set status=? WHERE userId=?";
+            String deactivateUserSQL = "UPDATE users set userstatus=CAST(? AS status) WHERE userId=?";
 
             // prepare the sql statement for database
             deactivateUserStatement = connection.prepareStatement(deactivateUserSQL);
@@ -1564,8 +1564,8 @@ public class DatabaseHandler {
                 return false;
             }
 
-            // SQL clause that updates suggestion information that's id is same as given in parameter object
-            String deactivateSuggestionByIdSQL = "UPDATE suggestions set status=? WHERE suggestionId=?";
+            // SQL clause that updates suggestion information that's id is same as given in parameter
+            String deactivateSuggestionByIdSQL = "UPDATE suggestions set suggestionstatus=CAST(? AS status) WHERE suggestionId=?";
 
             // prepare the sql statement for database
             deactivateSuggestionByIdStatement = connection.prepareStatement(deactivateSuggestionByIdSQL);
@@ -1603,8 +1603,8 @@ public class DatabaseHandler {
                 return false;
             }
 
-            // SQL clause that updates suggestion information that's id is same as given in parameter object
-            String deactivateSuggestionByIdAndUserIdSQL = "UPDATE suggestions set status=? WHERE suggestionId=? AND userId=?";
+            // SQL clause that updates suggestion information that's id is same as given in parameter and userId is same as given in parameter
+            String deactivateSuggestionByIdAndUserIdSQL = "UPDATE suggestions set suggestionstatus=CAST(? AS status) WHERE suggestionId=? AND userId=?";
 
             // prepare the sql statement for database
             deactivateSuggestionByIdAndUserIdStatement = connection.prepareStatement(deactivateSuggestionByIdAndUserIdSQL);
