@@ -1,4 +1,5 @@
 SuggestionBox/src/main/resources/file/config.properties
+target
 # Compiled class file
 *.class
 
