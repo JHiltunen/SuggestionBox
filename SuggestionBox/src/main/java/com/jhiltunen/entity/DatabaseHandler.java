@@ -33,7 +33,7 @@ public class DatabaseHandler {
             // call the method to read database configuration from properties file
             readProperties();
         } catch (IOException ex) {
-            System.out.println("Virhe Configiä luettaessa: " + ex.getMessage());
+            System.out.println("Error reading configuration file: " + ex.getMessage());
         }
     }
 
@@ -47,10 +47,11 @@ public class DatabaseHandler {
         ResultSet rs = null;
 
         try {
-            // connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, this.username, password);
-            // if connection fails
+            
             if (connection == null) {
+                // database connection fails
                 return false;
             }
 
@@ -82,7 +83,7 @@ public class DatabaseHandler {
 
     /*
     Use this method when you wan't to check that the email given in parameter is only taken by the user that's information is going to be modified
-    (In case user edits his/her own information and doesn't change his/her username.)
+    (In case user edits his/her own information and doesn't change his/her email.)
      */
     public boolean emailTakenOnlyById(String email, int id) {
         Connection connection = null;
@@ -90,14 +91,16 @@ public class DatabaseHandler {
         ResultSet rs = null;
 
         try {
-            // connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, this.username, password);
-            // if connection fails
+            
             if (connection == null) {
+                // database connection fails
                 return false;
             }
 
             String selectEmail = "SELECT email FROM users WHERE email=? AND userId != ?";
+            
             emailAvailable = connection.prepareStatement(selectEmail);
             emailAvailable.setString(1, email);
             emailAvailable.setInt(2, id);
@@ -214,11 +217,11 @@ public class DatabaseHandler {
         PreparedStatement addUserStatement = null;
 
         try {
-            // connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
-            // if connection fails
             if (connection == null) {
+                // connection fails
                 return false;
             }
 
@@ -228,8 +231,10 @@ public class DatabaseHandler {
             // prepare the sql statement for database
             addUserStatement = connection.prepareStatement(addUserSQL);
 
+            // hash the users password
             String hashedUserPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 
+            // set password (change unhashed to hashed) for user object
             user.setPassword(hashedUserPassword);
 
             // bind the values from object for the addUserSQL statement
@@ -239,7 +244,7 @@ public class DatabaseHandler {
             addUserStatement.setString(4, user.getUsername());
             addUserStatement.setString(5, user.getPassword());
             addUserStatement.setString(6, user.getPhone());
-            addUserStatement.setString(7, user.getCreationDate().toString());
+            addUserStatement.setString(7, user.getCreationDate());
             addUserStatement.setInt(8, user.getGroupID());
 
             // if user is succesfully added, then return 1 else return 0
@@ -263,11 +268,11 @@ public class DatabaseHandler {
         PreparedStatement addSuggestionStatement = null;
 
         try {
-            // connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
-            // if connection fails
             if (connection == null) {
+                // connection fails
                 return false;
             }
 
@@ -297,7 +302,7 @@ public class DatabaseHandler {
         }
     }
 
-    // method that checks if users credentials matched in database
+    // method that checks if users credentials matches credentials in database
     public UserBean verifyLogin(UserBean user) {
 
         Connection connection = null;
@@ -305,19 +310,18 @@ public class DatabaseHandler {
         ResultSet resultSet = null;
 
         try {
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
             } else {
                 System.out.println("Connection succesful!");
             }
 
-            // first find user with the username given in parametert
-            // SQL clause that searches for user with username given in parameter
+            // first find user from database that's username is same as the username given in parameter
+            // SQL clause that searches for user with username given in parameter and the status of the user is Active
             String searchUserByUsername = "SELECT userId, firstname, lastname, email, username, password, phone, userCreationDate, groupId, status FROM users WHERE username=? AND status=?";
 
             // prepare the sql statement for database
@@ -332,6 +336,7 @@ public class DatabaseHandler {
             if (resultSet.next()) {
                 // check if password matches the hashed password from database
                 if (BCrypt.checkpw(user.getPassword(), resultSet.getString("password"))) {
+                    // return users information after verifying the password
                     UserBean loggedIn = new UserBean();
 
                     loggedIn.setUserID(resultSet.getInt("userId"));
@@ -376,20 +381,21 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that counts all suggestions by one user
+            // SQL clause that counts all suggestions made by one user (userId in method parameter)
             String countUsersAllSuggestions = "SELECT COUNT(suggestionProcedure) AS usersAllSuggestions FROM suggestions WHERE userId=?";
 
             // prepare the sql statement for database
             countUsersAllSuggestionsStatement = connection.prepareStatement(countUsersAllSuggestions);
 
+            // bind the userId for the SQL clause
             countUsersAllSuggestionsStatement.setInt(1, userId);
 
             // execute the query and save the result to resultSet variable
@@ -410,7 +416,7 @@ public class DatabaseHandler {
     }
 
     /*
-    Count number of (specific) user's suggestions that have "Accepted" procedure
+    Count number of user's suggestions that have "Accepted" procedure
      */
     public int countUsersAcceptedSuggestions(int userId) {
 
@@ -420,18 +426,18 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that fetches all suggestion that's suggestionProcedure is "ACCEPTED"
+            // SQL clause that counts number of all suggestions made by one user (userId in method parameter) where the suggestionProcedure is "ACCEPTED"
             String countUsersAcceptedSuggestions = "SELECT COUNT(suggestionProcedure) AS usersAcceptedSuggestions FROM suggestions WHERE suggestionProcedure=? AND userId=?";
 
-            // prepare the sql statement for database
+            // prepare the SQL statement for database
             countUsersAcceptedSuggestionsStatement = connection.prepareStatement(countUsersAcceptedSuggestions);
 
             countUsersAcceptedSuggestionsStatement.setString(1, "APPROVED");
@@ -455,7 +461,7 @@ public class DatabaseHandler {
     }
 
     /*
-    Count number of (specific) user's suggestions that have "Rejected" procedure
+    Count number of user's suggestions that have "Rejected" procedure
      */
     public int countUsersRejectedSuggestions(int userId) {
 
@@ -465,15 +471,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that fetches all suggestion that's suggestionProcedure is "REJECTED"
+            // SQL clause that counts number of all suggestions made by one user (userId in method parameter) where the suggestionProcedure is "REJECTED"
             String countUsersRejectedSuggestions = "SELECT COUNT(suggestionProcedure) AS usersRejectedSuggestions FROM suggestions WHERE suggestionProcedure=? AND userId=?";
 
             // prepare the sql statement for database
@@ -500,7 +506,7 @@ public class DatabaseHandler {
     }
 
     /*
-    Count number of (specific) user's suggestions that have "WaitingDecision" procedure
+    Count number of user's suggestions that have "AWAITINGDECISION" procedure
      */
     public int countUsersAWaitingDecisionSuggestions(int userId) {
 
@@ -510,22 +516,21 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that fetches all suggestion that's suggestionProcedure is "AWAITINGDECISION"
+            // SQL clause that counts number of all suggestions made by one user (userId in method parameter) where the suggestionProcedure is "AWAITINGDECISION"
             String countUsersAwaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS usersAWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=? AND userId=?";
 
             // prepare the sql statement for database
             countUsersAwaitingDecisionSuggestionsStatement = connection.prepareStatement(countUsersAwaitingDecisionSuggestions);
 
             countUsersAwaitingDecisionSuggestionsStatement.setString(1, "AWAITINGDECISION");
-            System.out.println(userId);
             countUsersAwaitingDecisionSuggestionsStatement.setInt(2, userId);
 
             // execute the query and save the result to resultSet variable
@@ -546,7 +551,7 @@ public class DatabaseHandler {
     }
 
     /*
-    Count number of (specific) user's suggestions that have "Noprocedure" procedure
+    Count number of user's suggestions that have "NOPROCEDURE" procedure
      */
     public int countUsersNoProcedureSuggestions(int userId) {
 
@@ -556,7 +561,7 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
@@ -564,7 +569,7 @@ public class DatabaseHandler {
                 return 0;
             }
 
-            // SQL clause that fetches all suggestion that's suggestionProcedure is "NOPROCEDURE"
+            // SQL clause that counts number of all suggestions made by one user (userId in method parameter) where the suggestionProcedure is "NOPROCEDURE"
             String countUsersNoProcedureSuggestions = "SELECT COUNT(suggestionProcedure) AS usersNoProcedureSuggestions FROM suggestions WHERE suggestionProcedure=? AND userId=?";
 
             // prepare the sql statement for database
@@ -601,15 +606,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that counts all suggestions
+            // SQL clause that counts number of all suggestions
             String countAllSuggestions = "SELECT COUNT(suggestionProcedure) AS allAllSuggestions FROM suggestions";
 
             // prepare the sql statement for database
@@ -643,15 +648,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that fetches all suggestion that's suggestionProcedure is "ACCEPTED"
+            // SQL clause that counts number of all suggestions that's suggestionProcedure is "ACCEPTED"
             String countAllAcceptedSuggestions = "SELECT COUNT(suggestionProcedure) AS allAcceptedSuggestions FROM suggestions WHERE suggestionProcedure=?";
 
             // prepare the sql statement for database
@@ -687,15 +692,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that fetches all suggestion that's suggestionProcedure is "REJECTED"
+            // SQL clause that counts number of all suggestions that's suggestionProcedure is "REJECTED"
             String countAllRejectedSuggestions = "SELECT COUNT(suggestionProcedure) AS allRejectedSuggestions FROM suggestions WHERE suggestionProcedure=?";
 
             // prepare the sql statement for database
@@ -721,7 +726,7 @@ public class DatabaseHandler {
     }
 
     /*
-    count number of all suggestions that have "WaitingDecision" procedure
+    count number of all suggestions that have "AWAITINGDECISION" procedure
     */
     public int countAllWaitingDecisionSuggestions() {
 
@@ -731,16 +736,16 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that fetches all suggestion that's suggestionProcedure is "WAITINGDECISION"
-            String countAllWaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS allWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=?";
+            // SQL clause that counts number of all suggestions that's suggestionProcedure is "AWAITINGDECISION"
+            String countAllWaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS allAWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=?";
 
             // prepare the sql statement for database
             countAllWaitingDecisionSuggestionsStatement = connection.prepareStatement(countAllWaitingDecisionSuggestions);
@@ -751,7 +756,7 @@ public class DatabaseHandler {
             resultSet = countAllWaitingDecisionSuggestionsStatement.executeQuery();
 
             while (resultSet.next()) {
-                return resultSet.getInt("allWaitingDecisionSuggestions");
+                return resultSet.getInt("allAWaitingDecisionSuggestions");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -765,7 +770,7 @@ public class DatabaseHandler {
     }
 
     /*
-    count number of all suggestions that have "Noprocedure" procedure
+    count number of all suggestions that have "NOPROCEDURE" procedure
     */
     public int countAllNoProcedureSuggestions() {
 
@@ -775,15 +780,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
+                // connection failed
                 return 0;
             }
 
-            // SQL clause that fetches all suggestion that's suggestionProcedure is "NOPROCEDURE"
+            // SQL clause that counts number of all suggestions where suggestionProcedure is "NOPROCEDURE"
             String countAllNoProcedureSuggestions = "SELECT COUNT(suggestionProcedure) AS allNoProcedureSuggestions FROM suggestions WHERE suggestionProcedure=?";
 
             // prepare the sql statement for database
@@ -820,18 +825,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
-            } else {
-                System.out.println("Connection succesful!");
             }
 
-            // SQL clause that fetches all users
+            // SQL clause that fetches all users from database
             String fetchAllUsersSQL = "SELECT userId, firstname, lastname, email, username, phone, userCreationDate, groupId, status FROM users ORDER BY status, userCreationDate DESC";
 
             // prepare the sql statement for database
@@ -841,7 +843,7 @@ public class DatabaseHandler {
             resultSet = fetchAllUsersStatement.executeQuery();
 
             while (resultSet.next()) {
-                // Luodaan olio ja lisätään listaan                    
+                // create object and add it to list
                 UserBean user = new UserBean();
                 user.setUserID(Integer.parseInt(resultSet.getString("userId")));
                 user.setFirstname(resultSet.getString("firstname"));
@@ -867,43 +869,40 @@ public class DatabaseHandler {
     }
 
     /*
-    Method that searches all users that's firstname/lastname contains name or a part of name given in parameter
+    Method that searches all users that's firstname/lastname contains searchterm given in parameter
     */
-    public List<UserBean> searchUserByName(String name) {
+    public List<UserBean> searchUserByName(String searchterm) {
         List<UserBean> users = new ArrayList<>();
 
         Connection connection = null;
         PreparedStatement fetchAllUsersByNameStatement = null;
         ResultSet resultSet = null;
 
-        String nameInUpperCase = name.toUpperCase();
+        String searchTermInUpperCase = searchterm.toUpperCase();
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
-            } else {
-                System.out.println("Connection succesful!");
             }
 
-            // SQL clause that fetches all users
+            // SQL clause that fetches all users where the full name (firstname + lastname) contains the search term
             String fetchAllUsersByNameSQL = "SELECT userId, CONCAT(firstname, ' ', lastname) AS fullname, firstname, lastname, email, username, phone, userCreationDate, groupId, status FROM users HAVING UPPER(fullname) LIKE (?) ORDER BY status, userCreationDate DESC";
 
             // prepare the sql statement for database
             fetchAllUsersByNameStatement = connection.prepareStatement(fetchAllUsersByNameSQL);
 
-            fetchAllUsersByNameStatement.setString(1, '%' + nameInUpperCase + '%');
+            fetchAllUsersByNameStatement.setString(1, '%' + searchTermInUpperCase + '%');
 
             // execute the query and save the result to resultSet variable
             resultSet = fetchAllUsersByNameStatement.executeQuery();
 
             while (resultSet.next()) {
-                // Luodaan olio ja lisätään listaan                    
+                // create UserBean object and ad it to the list
                 UserBean user = new UserBean();
                 user.setUserID(Integer.parseInt(resultSet.getString("userId")));
                 user.setFirstname(resultSet.getString("firstname"));
@@ -924,7 +923,7 @@ public class DatabaseHandler {
             ConnectionManagement.closeStatement(fetchAllUsersByNameStatement);
             ConnectionManagement.closeConnection(connection);
         }
-        // return list of all users
+        // return list of all users where the fullname contains the searchterm
         return users;
     }
 
@@ -940,18 +939,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
-            } else {
-                System.out.println("Connection succesful!");
             }
 
-            // SQL clause that fetches all suggestions
+            // SQL clause that fetches all suggestions from database
             String fetchAllSuggestionsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId ORDER BY suggestions.status, suggestionCreationDate DESC";
 
             // prepare the sql statement for database
@@ -961,7 +957,7 @@ public class DatabaseHandler {
             resultSet = fetchAllSuggestionsStatement.executeQuery();
 
             while (resultSet.next()) {
-                // Luodaan olio ja lisätään listaan                    
+                // create SuggestionBean object and ad it to the list
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
 
@@ -993,9 +989,9 @@ public class DatabaseHandler {
     }
 
     /*
-    Fetches all suggestions where suggestionTitle contains string given in method parameter
+    Fetches all suggestions where suggestionTitle contains searchterm given in method parameter
     */
-    public List<SuggestionBean> fetchAllSuggestionsWhereTitleContains(String suggestionTitleContains) {
+    public List<SuggestionBean> fetchAllSuggestionsWhereTitleContains(String searchterm) {
         List<SuggestionBean> suggestions = new ArrayList<>();
 
         Connection connection = null;
@@ -1004,32 +1000,29 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
-            } else {
-                System.out.println("Connection succesful!");
             }
 
-            String suggestionTitleUppercase = suggestionTitleContains.toUpperCase();
+            String searchtermInUppercase = searchterm.toUpperCase();
 
-            // SQL clause that fetches all suggestions
+            // SQL clause that fetches all suggestions where suggestion title contains searchterm
             String fetchAllSuggestionsWhereTitleContainsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE UPPER(suggestionTitle) LIKE ? ORDER BY suggestions.status, suggestionCreationDate DESC";
 
             // prepare the sql statement for database
             fetchAllSuggestionsWhereTitleContainsStatement = connection.prepareStatement(fetchAllSuggestionsWhereTitleContainsSQL);
 
-            fetchAllSuggestionsWhereTitleContainsStatement.setString(1, '%' + suggestionTitleUppercase + '%');
+            fetchAllSuggestionsWhereTitleContainsStatement.setString(1, '%' + searchtermInUppercase + '%');
 
             // execute the query and save the result to resultSet variable
             resultSet = fetchAllSuggestionsWhereTitleContainsStatement.executeQuery();
 
             while (resultSet.next()) {
-                // Luodaan olio ja lisätään listaan                    
+                // create SuggestionBean object and add it to the list
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
 
@@ -1050,7 +1043,6 @@ public class DatabaseHandler {
                 suggestions.add(suggestion);
             }
 
-            System.out.println("Suggestions: " + suggestions);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -1058,14 +1050,14 @@ public class DatabaseHandler {
             ConnectionManagement.closeStatement(fetchAllSuggestionsWhereTitleContainsStatement);
             ConnectionManagement.closeConnection(connection);
         }
-        // return list of all suggestions
+        // return list of all suggestions where suggestion title contains searchterm
         return suggestions;
     }
 
     /*
     Fetches all suggestions (from specific user; user id given in method parameter) where suggestionTitle contains string given in method parameter
     */
-    public List<SuggestionBean> fetchUsersAllSuggestionsWhereTitleContains(String suggestionTitleContains, int userId) {
+    public List<SuggestionBean> fetchUsersAllSuggestionsWhereTitleContains(String searchterm, int userId) {
         List<SuggestionBean> suggestions = new ArrayList<>();
 
         Connection connection = null;
@@ -1074,33 +1066,30 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
-            } else {
-                System.out.println("Connection succesful!");
             }
 
-            String suggestionTitleUppercase = suggestionTitleContains.toUpperCase();
+            String searchtermInUppercase = searchterm.toUpperCase();
 
-            // SQL clause that fetches all suggestions
+            // SQL clause that fetches all suggestions made by specific user where the suggestion title contains searchterm
             String fetchUsersAllSuggestionsWhereTitleContainsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE UPPER(suggestionTitle) LIKE ? AND suggestions.userId = ? ORDER BY suggestions.status, suggestionCreationDate DESC";
 
             // prepare the sql statement for database
             fetchUsersAllSuggestionsWhereTitleContainsStatement = connection.prepareStatement(fetchUsersAllSuggestionsWhereTitleContainsSQL);
 
-            fetchUsersAllSuggestionsWhereTitleContainsStatement.setString(1, '%' + suggestionTitleUppercase + '%');
+            fetchUsersAllSuggestionsWhereTitleContainsStatement.setString(1, '%' + searchtermInUppercase + '%');
             fetchUsersAllSuggestionsWhereTitleContainsStatement.setInt(2, userId);
 
             // execute the query and save the result to resultSet variable
             resultSet = fetchUsersAllSuggestionsWhereTitleContainsStatement.executeQuery();
 
             while (resultSet.next()) {
-                // Luodaan olio ja lisätään listaan                    
+                // create SuggestionBean object and add it to the list
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
 
@@ -1129,12 +1118,12 @@ public class DatabaseHandler {
             ConnectionManagement.closeStatement(fetchUsersAllSuggestionsWhereTitleContainsStatement);
             ConnectionManagement.closeConnection(connection);
         }
-        // return list of all suggestions
+        // return list of all suggestions made by specific user where the suggestion title contains searchterm
         return suggestions;
     }
 
     /*
-    Fetches all suggestions that are made by specific user (userId defined in method parameter)
+    Fetches all suggestions that are made by specific user (userId given in method parameter)
     */
     public List<SuggestionBean> fetchAllSuggestionsByUserId(int userID) {
         List<SuggestionBean> suggestions = new ArrayList<>();
@@ -1145,18 +1134,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
-            } else {
-                System.out.println("Connection succesful!");
             }
 
-            // SQL clause that fetches all suggestions by userId
+            // SQL clause that fetches all suggestions made by one user (userId specified in parameter)
             String fetchAllSuggestionsByUserIdSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE suggestions.userId=? ORDER BY status, suggestionCreationDate DESC";
 
             // prepare the sql statement for database
@@ -1167,7 +1153,7 @@ public class DatabaseHandler {
             resultSet = fetchAllSuggestionsByUserIdStatement.executeQuery();
 
             while (resultSet.next()) {
-                // create Object and add to list                  
+                // create Object and add it to list                  
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
 
@@ -1207,18 +1193,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
-            } else {
-                System.out.println("Connection succesful!");
             }
 
-            // SQL clause that fetches users information by id
+            // SQL clause that fetches users information by userId
             String fetchUserById = "SELECT userId, firstname, lastname, email, username, phone, userCreationDate, groupId, status FROM users WHERE userId=?";
 
             // prepare the sql statement for database
@@ -1267,18 +1250,15 @@ public class DatabaseHandler {
 
         try {
 
-            // open connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
             if (connection == null) {
-                // Connection problem
-                System.out.println("Database connection failed!");
+                // connection failed
                 return null;
-            } else {
-                System.out.println("Connection succesful!");
             }
 
-            // SQL clause that fetches suggestion by suggestionId
+            // SQL clause that fetches suggestion information by suggestionId
             String fetchSuggestionByIdSQL = "SELECT suggestions.suggestionId, suggestions.suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestions.suggestionprocedure, procedureId, procedureDescription FROM suggestions LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE suggestions.suggestionId=?";
 
             // prepare the sql statement for database
@@ -1290,7 +1270,7 @@ public class DatabaseHandler {
             resultSet = fetchSuggestionByIdStatement.executeQuery();
 
             if (resultSet.next()) {
-                // get the suggestion information from database and return SuggestionBean with the data
+                // get the suggestion information from database and return SuggestionBean object with the data
                 SuggestionBean suggestion = new SuggestionBean();
                 ProcedureBean procedure = new ProcedureBean();
 
@@ -1337,7 +1317,7 @@ public class DatabaseHandler {
                 return false;
             }
 
-            // SQL clause that updates users information that's id is same as given in parameter object
+            // SQL clause that updates users (that's id is same as given in parameter) information
             String updateUser = "UPDATE users set firstname=?, lastname=?, email=?, username=?, phone=?, groupId=?, status=? WHERE userId=?";
 
             // prepare the sql statement for database
@@ -1357,7 +1337,6 @@ public class DatabaseHandler {
             return updateUserStatement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("Virhe päivityksessä: " + e.getMessage());
             e.printStackTrace();
         } finally {
             ConnectionManagement.closeResultSet(resultSet);
@@ -1382,7 +1361,7 @@ public class DatabaseHandler {
                 return false;
             }
 
-            // SQL clause that updates suggestions information that's id is same as given in parameter object
+            // SQL clause that updates suggestions information that's id is same as given in parameter
             String updateSuggestionSQL = "UPDATE suggestions set suggestionTitle=?, suggestionDescription=?, status=? WHERE suggestionId=?";
 
             // prepare the sql statement for database
@@ -1398,52 +1377,10 @@ public class DatabaseHandler {
             return updateSuggestionStatement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("Virhe päivityksessä: " + e.getMessage());
             e.printStackTrace();
         } finally {
             ConnectionManagement.closeResultSet(resultSet);
             ConnectionManagement.closeStatement(updateSuggestionStatement);
-            ConnectionManagement.closeConnection(connection);
-        }
-        return false;
-    }
-
-    /*
-    Method that checks if theres suggestion with specific id
-    */
-    public boolean suggestionExists(int suggestionId) {
-        Connection connection = null;
-        PreparedStatement suggestionExistsStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = ConnectionManagement.openConnection(driver, url, username, password);
-
-            if (connection == null) {
-                return false;
-            }
-
-            // SQL clause that fetches suggestion id that's id is same as given in parameter
-            String suggestionExistsSQL = "SELECT suggestionId FROM suggestions WHERE suggestionId=?";
-
-            // prepare the sql statement for database
-            suggestionExistsStatement = connection.prepareStatement(suggestionExistsSQL);
-
-            // bind the values from object for the update  statement
-            suggestionExistsStatement.setInt(1, suggestionId);
-
-            // execute the query and save the result to resultSet variable
-            resultSet = suggestionExistsStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return true;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            ConnectionManagement.closeResultSet(resultSet);
-            ConnectionManagement.closeStatement(suggestionExistsStatement);
             ConnectionManagement.closeConnection(connection);
         }
         return false;
@@ -1454,7 +1391,7 @@ public class DatabaseHandler {
      * suggestions
      *
      * @param suggestion
-     * @return true if update was succesful. Else return false
+     * @return true if update was successful. Else return false
      */
     public boolean updateSuggestionByUserId(SuggestionBean suggestion) {
         Connection connection = null;
@@ -1468,7 +1405,7 @@ public class DatabaseHandler {
                 return false;
             }
 
-            // SQL clause that updates suggestions information that's id is same as given in parameter object
+            // SQL clause that updates suggestions information that's id is same as given in parameter
             String updateSuggestionSQL = "UPDATE suggestions set suggestionTitle=?, suggestionDescription=?, status=? WHERE suggestionId=? AND userId=?";
 
             // prepare the sql statement for database
@@ -1485,7 +1422,6 @@ public class DatabaseHandler {
             return updateSuggestionStatement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("Virhe päivityksessä: " + e.getMessage());
             e.printStackTrace();
         } finally {
             ConnectionManagement.closeResultSet(resultSet);
@@ -1496,7 +1432,7 @@ public class DatabaseHandler {
     }
 
     /*
-    method that updates specific suggestions suggestionprocedurestatus
+    method that updates specific suggestion suggestionprocedure status
     */
     public boolean updateSuggestionProcedureStatus(ProcedureStatus suggestionProcedure, int suggestionId) {
         Connection connection = null;
@@ -1509,7 +1445,7 @@ public class DatabaseHandler {
                 return false;
             }
 
-            // SQL clause that updates suggestion suggestionprocedure that's suggestionID is same as id given in method parameter
+            // SQL clause that updates suggestion's suggestionprocedure that's suggestionID is same as id given in method parameter
             String updateSuggestionProcedureSQL = "UPDATE suggestions set suggestionprocedure=? WHERE suggestionId=?";
 
             // prepare the sql statement for database
@@ -1539,11 +1475,11 @@ public class DatabaseHandler {
         PreparedStatement addProcedureStatement = null;
 
         try {
-            // connection to database
+            // get connection to database
             connection = ConnectionManagement.openConnection(driver, url, username, password);
 
-            // if connection fails
             if (connection == null) {
+                // connection fails
                 return false;
             }
 
@@ -1575,7 +1511,7 @@ public class DatabaseHandler {
     }
 
     /*
-    changes the users (with specific userId) status to poistettu
+    changes the users (with specific userId) status to Deleted
     */
     public boolean deactivateUserByID(int userID) {
         Connection connection = null;
@@ -1614,7 +1550,7 @@ public class DatabaseHandler {
     }
 
     /*
-    changes the suggestion (with specific suggestionId) status to poistettu
+    changes the suggestion (with specific suggestionId) status to Deleted
     */
     public boolean deactivateSuggestionById(int suggestionID) {
         Connection connection = null;
@@ -1642,7 +1578,6 @@ public class DatabaseHandler {
             return deactivateSuggestionByIdStatement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("Virhe päivityksessä: " + e.getMessage());
             e.printStackTrace();
         } finally {
             ConnectionManagement.closeResultSet(resultSet);
@@ -1693,6 +1628,9 @@ public class DatabaseHandler {
         return false;
     }
 
+    /*
+    Method that reads database configuration from file
+    */
     private void readProperties() throws IOException {
         // Get the inputStream
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("file/config.properties");
