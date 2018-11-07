@@ -347,7 +347,7 @@ public class DatabaseHandler {
                     loggedIn.setPhone(resultSet.getString("phone"));
                     loggedIn.setCreationDate(resultSet.getString("userCreationDate"));
                     loggedIn.setGroupID(resultSet.getInt("groupId"));
-                    loggedIn.setStatus(Status.valueOf(resultSet.getString("status")));
+                    loggedIn.setStatus(Status.valueOf(resultSet.getString("userstatus")));
 
                     return loggedIn;
                 } else {
@@ -834,7 +834,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that fetches all users from database
-            String fetchAllUsersSQL = "SELECT userId, firstname, lastname, email, username, phone, userCreationDate, groupId, status FROM users ORDER BY status, userCreationDate DESC";
+            String fetchAllUsersSQL = "SELECT userId, firstname, lastname, email, username, phone, userCreationDate, groupId, userstatus FROM users ORDER BY userstatus, userCreationDate DESC";
 
             // prepare the sql statement for database
             fetchAllUsersStatement = connection.prepareStatement(fetchAllUsersSQL);
@@ -853,7 +853,7 @@ public class DatabaseHandler {
                 user.setPhone(resultSet.getString("phone"));
                 user.setCreationDate(resultSet.getString("userCreationDate"));
                 user.setGroupID(Integer.parseInt(resultSet.getString("groupId")));
-                user.setStatus(Status.valueOf(resultSet.getString("status")));
+                user.setStatus(Status.valueOf(resultSet.getString("userstatus")));
 
                 users.add(user);
             }
@@ -891,7 +891,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that fetches all users where the full name (firstname + lastname) contains the search term
-            String fetchAllUsersByNameSQL = "SELECT userId, CONCAT(firstname, ' ', lastname) AS fullname, firstname, lastname, email, username, phone, userCreationDate, groupId, status FROM users HAVING UPPER(fullname) LIKE (?) ORDER BY status, userCreationDate DESC";
+            String fetchAllUsersByNameSQL = "SELECT userId, CONCAT(firstname, ' ', lastname) AS fullname, firstname, lastname, email, username, phone, userCreationDate, groupId, userstatus FROM users HAVING UPPER(fullname) LIKE (?) ORDER BY userstatus, userCreationDate DESC";
 
             // prepare the sql statement for database
             fetchAllUsersByNameStatement = connection.prepareStatement(fetchAllUsersByNameSQL);
@@ -912,7 +912,7 @@ public class DatabaseHandler {
                 user.setPhone(resultSet.getString("phone"));
                 user.setCreationDate(resultSet.getString("userCreationDate"));
                 user.setGroupID(Integer.parseInt(resultSet.getString("groupId")));
-                user.setStatus(Status.valueOf(resultSet.getString("status")));
+                user.setStatus(Status.valueOf(resultSet.getString("userstatus")));
 
                 users.add(user);
             }
@@ -1202,7 +1202,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that fetches users information by userId
-            String fetchUserById = "SELECT userId, firstname, lastname, email, username, phone, userCreationDate, groupId, status FROM users WHERE userId=?";
+            String fetchUserById = "SELECT userId, firstname, lastname, email, username, phone, userCreationDate, groupId, userstatus FROM users WHERE userId=?";
 
             // prepare the sql statement for database
             fetchUserByIdStatement = connection.prepareStatement(fetchUserById);
@@ -1223,7 +1223,7 @@ public class DatabaseHandler {
                 user.setPhone(resultSet.getString("phone"));
                 user.setCreationDate(resultSet.getString("userCreationDate"));
                 user.setGroupID(resultSet.getInt("groupId"));
-                user.setStatus(Status.valueOf(resultSet.getString("status")));
+                user.setStatus(Status.valueOf(resultSet.getString("userstatus")));
 
                 return user;
             }
@@ -1318,7 +1318,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that updates users (that's id is same as given in parameter) information
-            String updateUser = "UPDATE users set firstname=?, lastname=?, email=?, username=?, phone=?, groupId=?, status=? WHERE userId=?";
+            String updateUser = "UPDATE users set firstname=?, lastname=?, email=?, username=?, phone=?, groupId=?, userstatus=? WHERE userId=?";
 
             // prepare the sql statement for database
             updateUserStatement = connection.prepareStatement(updateUser);
