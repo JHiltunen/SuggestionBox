@@ -32,14 +32,8 @@ public class LogoutController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-         
-        if (session != null) {
-            // session is active -> invalidate session
-            session.invalidate();
-        }
-        
-        // redirect to home (index) page
-        response.sendRedirect(request.getContextPath());
+        session.invalidate();
+        response.sendRedirect("http://aqueous-headland-15024.herokuapp.com");
     }
 
     /**
