@@ -745,7 +745,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions that's suggestionProcedure is "AWAITINGDECISION"
-            String countAllAWaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS allWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure)";
+            String countAllAWaitingDecisionSuggestions = "SELECT COUNT(suggestionProcedure) AS allAWaitingDecisionSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure)";
 
             // prepare the sql statement for database
             countAllAWaitingDecisionSuggestionsStatement = connection.prepareStatement(countAllAWaitingDecisionSuggestions);
@@ -948,7 +948,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that fetches all suggestions from database
-            String fetchAllSuggestionsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId ORDER BY suggestions.status, suggestionCreationDate DESC";
+            String fetchAllSuggestionsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.suggestionstatus, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId ORDER BY suggestions.suggestionstatus, suggestionCreationDate DESC";
 
             // prepare the sql statement for database
             fetchAllSuggestionsStatement = connection.prepareStatement(fetchAllSuggestionsSQL);
@@ -967,7 +967,7 @@ public class DatabaseHandler {
                 suggestion.setTitle(resultSet.getString("suggestionTitle"));
                 suggestion.setDescription(resultSet.getString("suggestionDescription"));
                 suggestion.setCreationDate(resultSet.getString("suggestionCreationDate"));
-                suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
+                suggestion.setStatus(Status.valueOf(resultSet.getString("suggestionstatus")));
                 suggestion.setProcedure(procedure);
 
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
@@ -1011,7 +1011,7 @@ public class DatabaseHandler {
             String searchtermInUppercase = searchterm.toUpperCase();
 
             // SQL clause that fetches all suggestions where suggestion title contains searchterm
-            String fetchAllSuggestionsWhereTitleContainsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE UPPER(suggestionTitle) LIKE ? ORDER BY suggestions.status, suggestionCreationDate DESC";
+            String fetchAllSuggestionsWhereTitleContainsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.suggestionstatus, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE UPPER(suggestionTitle) LIKE ? ORDER BY suggestions.suggestionstatus, suggestionCreationDate DESC";
 
             // prepare the sql statement for database
             fetchAllSuggestionsWhereTitleContainsStatement = connection.prepareStatement(fetchAllSuggestionsWhereTitleContainsSQL);
@@ -1032,7 +1032,7 @@ public class DatabaseHandler {
                 suggestion.setTitle(resultSet.getString("suggestionTitle"));
                 suggestion.setDescription(resultSet.getString("suggestionDescription"));
                 suggestion.setCreationDate(resultSet.getString("suggestionCreationDate"));
-                suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
+                suggestion.setStatus(Status.valueOf(resultSet.getString("suggestionstatus")));
                 suggestion.setProcedure(procedure);
 
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
@@ -1077,7 +1077,7 @@ public class DatabaseHandler {
             String searchtermInUppercase = searchterm.toUpperCase();
 
             // SQL clause that fetches all suggestions made by specific user where the suggestion title contains searchterm
-            String fetchUsersAllSuggestionsWhereTitleContainsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE UPPER(suggestionTitle) LIKE ? AND suggestions.userId = ? ORDER BY suggestions.status, suggestionCreationDate DESC";
+            String fetchUsersAllSuggestionsWhereTitleContainsSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.suggestionstatus, suggestionprocedure, username, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions INNER JOIN users ON suggestions.userId = users.userId LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE UPPER(suggestionTitle) LIKE ? AND suggestions.userId = ? ORDER BY suggestions.suggestionstatus, suggestionCreationDate DESC";
 
             // prepare the sql statement for database
             fetchUsersAllSuggestionsWhereTitleContainsStatement = connection.prepareStatement(fetchUsersAllSuggestionsWhereTitleContainsSQL);
@@ -1099,7 +1099,7 @@ public class DatabaseHandler {
                 suggestion.setTitle(resultSet.getString("suggestionTitle"));
                 suggestion.setDescription(resultSet.getString("suggestionDescription"));
                 suggestion.setCreationDate(resultSet.getString("suggestionCreationDate"));
-                suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
+                suggestion.setStatus(Status.valueOf(resultSet.getString("suggestionstatus")));
                 suggestion.setProcedure(procedure);
 
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
@@ -1143,7 +1143,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that fetches all suggestions made by one user (userId specified in parameter)
-            String fetchAllSuggestionsByUserIdSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestionprocedure, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE suggestions.userId=? ORDER BY status, suggestionCreationDate DESC";
+            String fetchAllSuggestionsByUserIdSQL = "SELECT suggestions.suggestionId, suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.suggestionstatus, suggestionprocedure, procedureDescription, procedureCreationDate, procedures.userId AS procedureUserId FROM suggestions LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE suggestions.userId=? ORDER BY suggestionstatus, suggestionCreationDate DESC";
 
             // prepare the sql statement for database
             fetchAllSuggestionsByUserIdStatement = connection.prepareStatement(fetchAllSuggestionsByUserIdSQL);
@@ -1162,7 +1162,7 @@ public class DatabaseHandler {
                 suggestion.setDescription(resultSet.getString("suggestionDescription"));
                 suggestion.setCreationDate(resultSet.getString("suggestionCreationDate"));
                 suggestion.setUserID(Integer.parseInt(resultSet.getString("userId")));
-                suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
+                suggestion.setStatus(Status.valueOf(resultSet.getString("suggestionstatus")));
                 suggestion.setProcedure(procedure);
 
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
@@ -1259,7 +1259,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that fetches suggestion information by suggestionId
-            String fetchSuggestionByIdSQL = "SELECT suggestions.suggestionId, suggestions.suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.status, suggestions.suggestionprocedure, procedureId, procedureDescription FROM suggestions LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE suggestions.suggestionId=?";
+            String fetchSuggestionByIdSQL = "SELECT suggestions.suggestionId, suggestions.suggestionTitle, suggestionDescription, suggestionCreationDate, suggestions.userId, suggestions.suggestionstatus, suggestions.suggestionprocedure, procedureId, procedureDescription FROM suggestions LEFT JOIN procedures ON suggestions.suggestionId = procedures.suggestionId WHERE suggestions.suggestionId=?";
 
             // prepare the sql statement for database
             fetchSuggestionByIdStatement = connection.prepareStatement(fetchSuggestionByIdSQL);
@@ -1279,7 +1279,7 @@ public class DatabaseHandler {
                 suggestion.setDescription(resultSet.getString("suggestionDescription"));
                 suggestion.setCreationDate(resultSet.getString("suggestionCreationDate"));
                 suggestion.setUserID(resultSet.getInt("userId"));
-                suggestion.setStatus(Status.valueOf(resultSet.getString("status")));
+                suggestion.setStatus(Status.valueOf(resultSet.getString("suggestionstatus")));
                 suggestion.setProcedure(procedure);
 
                 procedure.setSuggestionProcedure(ProcedureStatus.valueOf(resultSet.getString("suggestionprocedure")));
