@@ -895,7 +895,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that fetches all users where the full name (firstname + lastname) contains the search term
-            String fetchAllUsersByNameSQL = "SELECT userId, CONCAT(firstname, ' ', lastname) AS fullname, firstname, lastname, email, username, phone, userCreationDate, groupId, userstatus FROM users HAVING UPPER(fullname) LIKE (?) ORDER BY userstatus, userCreationDate DESC";
+            String fetchAllUsersByNameSQL = "SELECT userId, firstname, lastname, email, username, phone, userCreationDate, groupId, userstatus FROM users WHERE UPPER(CONCAT(firstname, ' ', lastname)) LIKE (?) ORDER BY userstatus, userCreationDate DESC";
 
             // prepare the sql statement for database
             fetchAllUsersByNameStatement = connection.prepareStatement(fetchAllUsersByNameSQL);
