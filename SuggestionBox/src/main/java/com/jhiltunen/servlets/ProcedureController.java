@@ -120,7 +120,7 @@ public class ProcedureController extends HttpServlet {
 
         if (errors.isEmpty() && databaseHandler.addProcedure(procedure) && databaseHandler.updateSuggestionProcedureStatus(procedure.getSuggestionProcedure(), suggestionID)) {
             request.getRequestDispatcher("ControlGroupController").forward(request, response);
-            System.out.println("Lisättiin");
+            System.out.println("Procedure was added/modified");
         } else {
             SuggestionBean suggestion = databaseHandler.fetchSuggestionById(suggestionID);
 

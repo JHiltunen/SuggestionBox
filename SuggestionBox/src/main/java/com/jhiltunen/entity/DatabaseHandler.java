@@ -1472,7 +1472,7 @@ public class DatabaseHandler {
     }
 
     /*
-    method that adds procedure and if there's duplicate key, then updates procedure information
+    method that adds procedure and if there's duplicate key (suggestionId), then updates procedure information
     */
     public boolean addProcedure(ProcedureBean procedure) {
         Connection connection = null;
@@ -1489,7 +1489,7 @@ public class DatabaseHandler {
 
             // declare SQL-clause for adding new procedure. If there is duplicate unique key, description of procedure will be updated
             // status of the suggestion procedure is handled in SuggestionProcedureController-servlet
-            String addProcedureSQL = "INSERT INTO procedures (procedureDescription, procedureCreationDate, userId, suggestionId) VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE procedureDescription=?";
+            String addProcedureSQL = "INSERT INTO procedures (procedureDescription, procedureCreationDate, userId, suggestionId) VALUES(?, ?, ?, ?) ON CONFLICT (suggestionId) DO UPDATE SET procedureDescription=?";
 
             // prepare the sql statement for database
             addProcedureStatement = connection.prepareStatement(addProcedureSQL);
