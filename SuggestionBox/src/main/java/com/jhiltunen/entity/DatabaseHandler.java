@@ -8,9 +8,11 @@ package com.jhiltunen.entity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -27,6 +29,8 @@ public class DatabaseHandler {
     private String username;
     private String password;
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    
     public DatabaseHandler() {
 
         try {
@@ -1318,12 +1322,12 @@ public class DatabaseHandler {
             }
 
             // SQL clause that updates users (that's id is same as given in parameter) information
-            String updateUser = "UPDATE users set firstname=?, lastname=?, email=?, username=?, phone=?, groupId=?, userstatus=? WHERE userId=?";
+            String updateUser = "UPDATE users set firstname=?, lastname=?, email=?, username=?, phone=?, groupId=?, userstatus=CAST (? AS status) WHERE userId=?";
 
             // prepare the sql statement for database
             updateUserStatement = connection.prepareStatement(updateUser);
 
-            // bind the values from object for the addUserSQL statement
+            // bind the values from object for the updateUserSQL statement
             updateUserStatement.setString(1, user.getFirstname());
             updateUserStatement.setString(2, user.getLastname());
             updateUserStatement.setString(3, user.getEmail());
