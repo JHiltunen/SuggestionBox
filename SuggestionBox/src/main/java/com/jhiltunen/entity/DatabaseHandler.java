@@ -574,7 +574,7 @@ public class DatabaseHandler {
             }
 
             // SQL clause that counts number of all suggestions made by one user (userId in method parameter) where the suggestionProcedure is "NOPROCEDURE"
-            String countUsersNoProcedureSuggestions = "SELECT COUNT(suggestionProcedure) AS usersNoProcedureSuggestions FROM suggestions WHERE suggestionProcedure=? AND userId=?";
+            String countUsersNoProcedureSuggestions = "SELECT COUNT(suggestionProcedure) AS usersNoProcedureSuggestions FROM suggestions WHERE suggestionProcedure=CAST(? AS suggestionprocedure) AND userId=?";
 
             // prepare the sql statement for database
             countUsersNoProcedureSuggestionsStatement = connection.prepareStatement(countUsersNoProcedureSuggestions);

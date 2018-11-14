@@ -42,7 +42,7 @@ public class DeleteUserController extends HttpServlet {
         } else {
             // make sure that the user belongs to correct group
             // only admin users can delete users
-            int groupId = Integer.parseInt(request.getParameter("groupId"));
+            int groupId = (Integer) session.getAttribute("groupId");
 
             if (groupId == 1) {
                 request.getRequestDispatcher("UserController").forward(request, response);
@@ -68,7 +68,10 @@ public class DeleteUserController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int groupId = Integer.parseInt(request.getParameter("groupId"));
+        
+        HttpSession session = request.getSession(false);
+        
+        int groupId = (Integer) session.getAttribute("groupId");
         int userId = Integer.parseInt(request.getParameter("userId"));
 
         // make sure that user who tries to delete another user, belongs to Admin group
