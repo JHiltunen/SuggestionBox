@@ -35,9 +35,7 @@ public class SuggestionBean implements Serializable {
     }
 
     public void setUsername(String username) {
-        if (username.length() <= 10) {
-            this.username = username;
-        }
+        this.username = username;
     }
 
     public int getId() {
