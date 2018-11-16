@@ -47,6 +47,8 @@ public class ProcedureBean {
     public void setDescription(String description) {
         if (description.length() <= 1000) {
             this.description = description;
+        } else {
+            this.description = "";
         }
     }
 
@@ -59,6 +61,8 @@ public class ProcedureBean {
         // so it has 10 characters
         if (date.length() == 10) {
             this.date = date;
+        } else {
+            this.date = "";
         }
     }
 

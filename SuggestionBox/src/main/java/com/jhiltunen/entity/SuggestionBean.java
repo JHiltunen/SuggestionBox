@@ -53,6 +53,8 @@ public class SuggestionBean implements Serializable {
     public void setTitle(String title) {
         if (title.length() <= 255) {
             this.title = title;
+        } else {
+            this.title = "";
         }
     }
 
@@ -63,6 +65,8 @@ public class SuggestionBean implements Serializable {
     public void setDescription(String description) {
         if (description.length() <= 1600000) {
             this.description = description;
+        } else {
+            this.description = "";
         }
     }
 
@@ -75,6 +79,8 @@ public class SuggestionBean implements Serializable {
         // so it has 10 characters
         if (creationDate.length() == 10) {
             this.creationDate = creationDate;
+        } else {
+            this.creationDate = "";
         }
     }
 

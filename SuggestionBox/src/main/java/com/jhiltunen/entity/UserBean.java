@@ -40,6 +40,8 @@ public class UserBean implements Serializable {
     public void setFirstname(String firstname) {
         if (firstname.length() <= 30) {
             this.firstname = firstname;
+        } else {
+            this.firstname = "";
         }
     }
 
@@ -50,6 +52,8 @@ public class UserBean implements Serializable {
     public void setLastname(String lastname) {
         if (lastname.length() <= 30) {
             this.lastname = lastname;
+        } else {
+            this.lastname = "";
         }
     }
 
@@ -60,6 +64,8 @@ public class UserBean implements Serializable {
     public void setEmail(String email) {
         if (email.length() <= 60) {
             this.email = email;
+        } else {
+            this.email = "";
         }
     }
 
@@ -70,6 +76,8 @@ public class UserBean implements Serializable {
     public void setUsername(String username) {
         if (username.length() <= 10) {
             this.username = username;
+        } else {
+            this.username = "";
         }
     }
 
@@ -80,6 +88,8 @@ public class UserBean implements Serializable {
     public void setPassword(String password) {
         if (password.length() <= 60) {
             this.password = password;
+        } else {
+            this.password = "";
         }
     }
 
@@ -90,6 +100,8 @@ public class UserBean implements Serializable {
     public void setPhone(String phone) {
         if (phone.length() <= 15) {
             this.phone = phone;
+        } else {
+            this.phone = "";
         }
     }
 
@@ -102,6 +114,8 @@ public class UserBean implements Serializable {
         // so it has 10 characters
         if (creationDate.length() == 10) {
             this.creationDate = creationDate;
+        } else {
+            this.creationDate = "";
         }
     }
 
