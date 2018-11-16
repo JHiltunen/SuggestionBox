@@ -45,7 +45,9 @@ public class ProcedureBean {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        if (description.length() <= 1000) {
+            this.description = description;
+        }
     }
 
     public String getDate() {
@@ -53,7 +55,11 @@ public class ProcedureBean {
     }
 
     public void setDate(String date) {
-        this.date = date;
+        // date is in format 2018-01-05
+        // so it has 10 characters
+        if (date.length() == 10) {
+            this.date = date;
+        }
     }
 
     public int getUserId() {

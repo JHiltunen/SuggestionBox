@@ -38,7 +38,9 @@ public class UserBean implements Serializable {
     }
 
     public void setFirstname(String firstname) {
-        this.firstname = firstname;
+        if (firstname.length() <= 30) {
+            this.firstname = firstname;
+        }
     }
 
     public String getLastname() {
@@ -46,7 +48,9 @@ public class UserBean implements Serializable {
     }
 
     public void setLastname(String lastname) {
-        this.lastname = lastname;
+        if (lastname.length() <= 30) {
+            this.lastname = lastname;
+        }
     }
 
     public String getEmail() {
@@ -54,7 +58,9 @@ public class UserBean implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (email.length() <= 60) {
+            this.email = email;
+        }
     }
 
     public String getUsername() {
@@ -62,7 +68,9 @@ public class UserBean implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        if (username.length() <= 10) {
+            this.username = username;
+        }
     }
 
     public String getPassword() {
@@ -70,7 +78,9 @@ public class UserBean implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password.length() <= 60) {
+            this.password = password;
+        }
     }
 
     public String getPhone() {
@@ -78,7 +88,9 @@ public class UserBean implements Serializable {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        if (phone.length() <= 15) {
+            this.phone = phone;
+        }
     }
 
     public String getCreationDate() {
@@ -86,7 +98,11 @@ public class UserBean implements Serializable {
     }
 
     public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
+        // creationdate is in format 2018-01-05
+        // so it has 10 characters
+        if (creationDate.length() == 10) {
+            this.creationDate = creationDate;
+        }
     }
 
     public int getGroupID() {
