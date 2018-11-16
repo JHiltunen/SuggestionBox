@@ -96,27 +96,27 @@ public class RegisterController extends HttpServlet {
         List<String> errors = new ArrayList<>();
 
         if (user.getFirstname().isEmpty()) {
-            errors.add("Please fill in your first name");
+            errors.add("Firstname is invalid or missing");
         }
 
         if (user.getLastname().isEmpty()) {
-            errors.add("Please fill in your last name");
+            errors.add("Lastname is invalid or missing");
         }
 
         if (user.getEmail().isEmpty()) {
-            errors.add("Please fill in your email");
+            errors.add("Email is invalid or missing");
         }
 
         if (user.getUsername().isEmpty()) {
-            errors.add("Please fill in your username");
+            errors.add("Username is invalid or missing");
         }
 
         if (user.getPassword().isEmpty()) {
-            errors.add("Please fill in your password");
+            errors.add("Password is invalid or missing");
         }
 
         if (user.getPhone().isEmpty()) {
-            errors.add("Please fill in your phonenumber");
+            errors.add("Phonenumber is invalid or missing");
         }
 
         if (!user.getPhone().matches(phoneRegex)) {
@@ -129,7 +129,6 @@ public class RegisterController extends HttpServlet {
         }
 
         if (!databaseHandler.usernameAvailable(user.getUsername())) {
-            System.out.println("Username on jo käytössä");
             errors.add("Username is already in use!");
         }
 

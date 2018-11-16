@@ -101,11 +101,11 @@ public class AddSuggestionController extends HttpServlet {
         List<String> errors = new ArrayList<>();
 
         if (suggestionBean.getTitle().isEmpty()) {
-            errors.add("Suggestion name is missing");
+            errors.add("Suggestion name is invalid or missing");
         }
 
         if (suggestionBean.getDescription().isEmpty()) {
-            errors.add("Suggestion description is missing");
+            errors.add("Suggestion description is invalid or missing");
         }
 
         if (errors.isEmpty() && databaseHandler.addSuggestion(suggestionBean)) {
