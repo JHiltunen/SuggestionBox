@@ -2,7 +2,7 @@
 
 An application for employees to provide feedback to supervisors.
 
-App running on [Heroku](http://aqueous-headland-15024.herokuapp.com/)
+App running on [Heroku](https://suggestionboxjhiltunen.herokuapp.com/)
 
 
 ## Usage
