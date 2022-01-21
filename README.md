@@ -1,6 +1,6 @@
 # SuggestionBox
 
-An application for employees to provide feedback to supervisors.
+An responsive application for employees to provide feedback to supervisors.
 
 App running on [Heroku](https://suggestionboxjhiltunen.herokuapp.com/)
 
