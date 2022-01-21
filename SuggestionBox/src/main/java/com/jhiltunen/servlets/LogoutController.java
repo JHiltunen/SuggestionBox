@@ -33,7 +33,7 @@ public class LogoutController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         session.invalidate();
-        response.sendRedirect("http://aqueous-headland-15024.herokuapp.com");
+        response.sendRedirect(request.getScheme() + "://" + request.getServerName());
     }
 
     /**
