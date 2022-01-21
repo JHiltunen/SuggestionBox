@@ -1636,22 +1636,29 @@ public class DatabaseHandler {
     Method that reads database configuration from file
     */
     private void readProperties() throws IOException {
+        // Use for local propertis file
         // Get the inputStream
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("file/config.properties");
+        //InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("file/config.properties");
 
-        Properties properties = new Properties();
+        // Properties properties = new Properties();
 
         // load the inputStream using the Properties
-        properties.load(inputStream);
+        // properties.load(inputStream);
         // get the value of the property
-        String driverProp = properties.getProperty("driver");
-        String urlProp = properties.getProperty("url");
-        String usernameProp = properties.getProperty("username");
-        String passwordProp = properties.getProperty("password");
+        // String driverProp = properties.getProperty("driver");
+        // String urlProp = properties.getProperty("url");
+        // String usernameProp = properties.getProperty("username");
+        // String passwordProp = properties.getProperty("password");
 
-        this.driver = driverProp;
-        this.url = urlProp;
-        this.username = usernameProp;
-        this.password = passwordProp;
+        // Use if running on Heroku
+        String databaseHost = System.getenv("DATABASE_HOST");
+        String databasePort = System.getenv("DATABASE_PORT");
+        String databaseName = System.getenv("DATABASE");
+        String databaseUser = System.getenv("DATABASE_USER");
+        String databasePassword = System.getenv("DATABASE_PASSWORD");
+        this.driver = System.getenv("DATABASE_DRIVER");
+        this.url = "jdbc:postgresql://" + databaseHost + ":" + databasePort + "/" + databaseName;
+        this.username = databaseUser;
+        this.password = databasePassword;
     }
 }

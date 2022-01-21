@@ -19,7 +19,7 @@ public class ConnectionManagement {
     // opens connection to database
     public static Connection openConnection(String driver, String url, String user, String password) {
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName(driver);
             return DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
             e.printStackTrace();
